@@ -17,8 +17,11 @@ class SpectrometerConfig
         bool setTrigger(TriggerType config, MeasConfigType* measConfig);
         bool setControlSettings(ControlSettingsType config,
                                 MeasConfigType* measConfig);
+	MeasConfigType* getConfiguration() { return &config_; }
     
     private:
+
+	MeasConfigType config_;
         enum class specConfigParams
         {
             START_PIXEL,
@@ -36,28 +39,29 @@ class SpectrometerConfig
         bool checkValRange(TYPE val, int lower, int upper);
 
 	template<class TYPE>
-	bool checkandSetVal(T val, specConfigParams valConfig, int lower, int upper, MeasConfigType* measConfig);
+	bool checkandSetVal(TYPE val, specConfigParams valConfig, int lower, int upper, MeasConfigType* measConfig);
 
 	template<class TYPE>
         void setVal(TYPE val, 
                     specConfigParams config_type,
                     MeasConfigType* measConfig);
 
-}
+};
 
 
 template<class TYPE>
 bool SpectrometerConfig::checkValRange(TYPE val, int lower, int upper)
 {
-    return val >= lower && val <= upper
+    return val >= lower && val <= upper;
 }
 
-void SpectrometerConfig::setVal(val, specConfigParams config_type, MeasConfigType* measConfig)
+template<class T>
+void SpectrometerConfig::setVal(T val, specConfigParams config_type, MeasConfigType* measConfig)
 {
     switch(config_type)
     {
         case specConfigParams::START_PIXEL:
-            measConfig -> m_StartPixel = val;
+            measConfig -> m_StartPixel = static_cast<decltype(measConfig->m_StartPixel)>(val);
             break;
         case specConfigParams::STOP_PIXEL:
             measConfig -> m_StopPixel = val;
@@ -84,14 +88,13 @@ void SpectrometerConfig::setVal(val, specConfigParams config_type, MeasConfigTyp
             measConfig -> m_Trigger.m_Source = val -> source;
             measConfig -> m_Trigger.m_Source = val -> type;
             break;
-        case specConfigParams::CONTROL:
+        case specConfigParams::CONTROL_SETTINGS:
             measConfig -> m_Control.m_StrobeControl = val -> strobe;
             measConfig -> m_Control.m_LaserDelay = val -> delay;
             measConfig -> m_Control.m_LaserWidth = val -> width;
             measConfig -> m_Control.m_LaserWaveLength = val -> wavelength;
             measConfig -> m_Control.m_StoreToRam = val -> store_to_ram;
             break;
-        return 1
     }
 }
 
