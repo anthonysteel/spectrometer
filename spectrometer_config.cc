@@ -31,19 +31,28 @@ class SpectrometerConfig
             TRIGGER,
             CONTROL_SETTINGS
         };
-        bool checkValRange();
-        void setVal(val, 
+
+	template<class TYPE>
+        bool checkValRange(TYPE val, int lower, int upper);
+
+	template<class TYPE>
+	bool checkandSetVal(T val, specConfigParams valConfig, int lower, int upper, MeasConfigType* measConfig);
+
+	template<class TYPE>
+        void setVal(TYPE val, 
                     specConfigParams config_type,
                     MeasConfigType* measConfig);
+
 }
 
 
-bool checkValRange(val, lower, upper)
+template<class TYPE>
+bool SpectrometerConfig::checkValRange(TYPE val, int lower, int upper)
 {
     return val >= lower && val <= upper
 }
 
-void setVal(val, specConfigParams config_type, MeasConfigType* measConfig)
+void SpectrometerConfig::setVal(val, specConfigParams config_type, MeasConfigType* measConfig)
 {
     switch(config_type)
     {
@@ -86,7 +95,9 @@ void setVal(val, specConfigParams config_type, MeasConfigType* measConfig)
     }
 }
 
-bool checkandSetVal(val, valConfig, lower, upper, measConfig)
+template<class T>
+bool SpectrometerConfig::checkandSetVal(T val, specConfigParams valConfig, int lower, int upper, MeasConfigType* measConfig)
+{
     if(!checkValRange(val, lower, upper))
     {
         setVal(val, valConfig, measConfig)
@@ -96,6 +107,7 @@ bool checkandSetVal(val, valConfig, lower, upper, measConfig)
     {
         return 0;
     }
+}
 
 bool SpectrometerConfig::setStartPixel(unsigned short val,
                                        MeasConfigType* measConfig)
