@@ -107,7 +107,7 @@ bool SpectrometerConfig::setStartPixel(unsigned short val,
 }
 
 bool SpectrometerConfig::setStopPixel(unsigned short val,
-                                       MeasConfigType* measConfig)
+                                      MeasConfigType* measConfig)
 {
     int LOWER = 0;
     int UPPER = 4095;
@@ -116,7 +116,7 @@ bool SpectrometerConfig::setStopPixel(unsigned short val,
 }
 
 bool SpectrometerConfig::setIntegrationTime(float val,
-                                       MeasConfigType* measConfig)
+                                            MeasConfigType* measConfig)
 {
     int LOWER = 0.002;
     int UPPER = 600000;
@@ -125,7 +125,7 @@ bool SpectrometerConfig::setIntegrationTime(float val,
 }
 
 bool SpectrometerConfig::setIntegrationDelay(unsigned int val,
-                                       MeasConfigType* measConfig)
+                                             MeasConfigType* measConfig)
 {
     int LOWER = 0;
     int UPPER = 0xFFFFFFFF;
@@ -135,7 +135,7 @@ bool SpectrometerConfig::setIntegrationDelay(unsigned int val,
 
 
 bool SpectrometerConfig::setNumberAverages(unsigned int val,
-                                       MeasConfigType* measConfig)
+                                           MeasConfigType* measConfig)
 {
     int LOWER = 1;
     int UPPER = 0xFFFFFFFF;
@@ -153,7 +153,7 @@ bool SpectrometerConfig::setCorDynDark(DarkCorrectionType val,
 }
 
 bool SpectrometerConfig::setSmoothing(SmoothingType val,
-                                       MeasConfigType* measConfig)
+                                      MeasConfigType* measConfig)
 {
     int LOWER = 0;
     int UPPER = 4095;
@@ -162,7 +162,7 @@ bool SpectrometerConfig::setSmoothing(SmoothingType val,
 }
 
 bool SpectrometerConfig::setTrigger(TriggerType val,
-                                       MeasConfigType* measConfig)
+                                    MeasConfigType* measConfig)
 {
     int LOWER = 0;
     int UPPER = 4095;
@@ -171,7 +171,7 @@ bool SpectrometerConfig::setTrigger(TriggerType val,
 }
 
 bool SpectrometerConfig::setControlSettings(ControlSettingsType val,
-                                       MeasConfigType* measConfig)
+                                            MeasConfigType* measConfig)
 {
     int LOWER = 0;
     int UPPER = 4095;
