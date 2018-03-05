@@ -3,25 +3,34 @@
 class SpectrometerConfig 
 {
     public:
-        // Default constructor
         SpectrometerConfig();
         
-        bool setStartPixel(unsigned short val, MeasConfigType* measConfig);
-        bool setStopPixel(unsigned short val, MeasConfigType* measConfig);
-        bool setIntegrationTime(float val, MeasConfigType* measConfig);
-        bool setIntegrationDelay(unsigned int val, MeasConfigType* measConfig);
-        bool setNumberAverages(unsigned int val, MeasConfigType* measConfig);
-        bool setCorDynDark(DarkCorrectionType config,
-                           MeasConfigType* measConfig);
-        bool setSmoothing(SmoothingType config, MeasConfigType* measConfig);
-        bool setTrigger(TriggerType config, MeasConfigType* measConfig);
-        bool setControlSettings(ControlSettingsType config,
-                                MeasConfigType* measConfig);
-	MeasConfigType* getConfiguration() { return &config_; }
+        bool setStartPixel(unsigned short val);
+        bool setStopPixel(unsigned short val);
+        bool setIntegrationTime(float val);
+        bool setIntegrationDelay(unsigned int val);
+        bool setNumberAverages(unsigned int val);
+        // Dynamic Dark Correction Type
+        bool setEnable(unsigned char val);
+        bool setForgetPercentage(unsigned char val);
+        // Smoothing Type
+        bool setSmoothPixel(unsigned short val);
+        bool setSmoothModel(unsigned char val);
+        // Trigger type
+        bool setMode(unsigned char val);
+        bool setSource(unsigned char val);
+        bool setSourceType(unsigned char val);
+        // Control Settings
+        bool setStrobeControl(unsigned short val);
+        bool setLaserDelay(unsigned int val);
+        bool setLaserWidth(unsigned int val);
+        bool setLaserWavelength(float val);
+        bool setStoreToRam(unsigned short val);
+
+        MeasConfigType* getConfigType() { return &config_; }
     
     private:
-
-	MeasConfigType config_;
+        MeasConfigType config_;
         enum class specConfigParams
         {
             START_PIXEL,
@@ -29,22 +38,31 @@ class SpectrometerConfig
             INTEGRATION_TIME,
             INTEGRATION_DELAY,
             NUMBER_AVERAGES,
-            COR_DYN_DARK,
-            SMOOTHING,
-            TRIGGER,
-            CONTROL_SETTINGS
+            ENABLE,
+            FORGET_PERCENTAGE,
+            SMOOTH_PIXEL,
+            SMOOTH_MODEL,
+            MODE,
+            SOURCE,
+            SOURCE_TYPE,
+            STROBE_CONTROL,
+            LASER_DELAY,
+            LASER_WIDTH,
+            LASER_WAVELENGTH,
+            STORE_TO_RAM
         };
 
-	template<class TYPE>
+        template<class TYPE>
         bool checkValRange(TYPE val, int lower, int upper);
 
-	template<class TYPE>
-	bool checkandSetVal(TYPE val, specConfigParams valConfig, int lower, int upper, MeasConfigType* measConfig);
-
-	template<class TYPE>
+        template<class TYPE>
         void setVal(TYPE val, 
                     specConfigParams config_type,
-                    MeasConfigType* measConfig);
+                    MeasConfigType* config_);
+
+        template<class TYPE>
+        bool checkandSetVal(TYPE val, specConfigParams valConfig,
+                            int lower, int upper);
 
 };
 
@@ -56,54 +74,102 @@ bool SpectrometerConfig::checkValRange(TYPE val, int lower, int upper)
 }
 
 template<class T>
-void SpectrometerConfig::setVal(T val, specConfigParams config_type, MeasConfigType* measConfig)
+void SpectrometerConfig::setVal(T val, specConfigParams config_type)
 {
     switch(config_type)
     {
         case specConfigParams::START_PIXEL:
-            measConfig -> m_StartPixel = static_cast<decltype(measConfig->m_StartPixel)>(val);
+            config_ -> m_StartPixel = static_cast<decltype(
+                                      config_ -> m_StartPixel)>(val);
             break;
         case specConfigParams::STOP_PIXEL:
-            measConfig -> m_StopPixel = val;
+            config_ -> m_StopPixel = static_cast<decltype(
+                                     config_ -> m_StopPixel)>(val);
             break;
         case specConfigParams::INTEGRATION_TIME:
-            measConfig -> m_IntegrationTime = val;
+            config_ -> m_IntegrationTime = static_cast<decltype(
+                                           config_ -> m_IntegrationTime)
+                                           -> (val);
             break;
         case specConfigParams::INTEGRATION_DELAY:
-            measConfig -> m_IntegrationDelay = val;
+            config_ -> m_IntegrationDelay = static_cast<decltype(
+                                            config_ -> m_IntegrationDelay)
+                                            -> (val);
             break;
         case specConfigParams::NUMBER_AVERAGES:
-            measConfig -> m_NrAverages = val;
+            config_ -> m_NrAverages = static_cast<decltype(
+                                      config_ -> m_NrAverages)
+                                      -> (val);
             break;
-        case specConfigParams::COR_DYN_DARK:
-            measConfig -> m_CorDynDark.m_Enable = val -> enable;
-            measConfig -> m_CorDynDark.m_ForgetPercentage = val -> percentage;
+        case specConfigParams::ENABLE:
+            config_ -> m_CorDynDark.m_Enable = static_cast<decltype(
+                                               config_ -> m_CorDynDark.m_Enable)
+                                                -> (val);
             break;
-        case specConfigParams::SMOOTHING:
-            measConfig -> m_Smoothing.m_SmoothPix = val -> pixel;
-            measConfig -> m_Smoothing.m_SmoothModel = val -> model;
+        case specConfigParams::FORGET_PERCENTAGE:
+            config_ -> m_CorDynDark.m_ForgetPercentage = static_cast<decltype(
+                                    config_ -> m_CorDynDark.m_ForgetPercentage)
+                                    -> (val);
             break;
-        case specConfigParams::TRIGGER:
-            measConfig -> m_Trigger.m_Mode = val -> mode;
-            measConfig -> m_Trigger.m_Source = val -> source;
-            measConfig -> m_Trigger.m_Source = val -> type;
+        case specConfigParams::SMOOTH_PIXEL:
+            config_ -> m_Smoothing.m_SmoothPix = static_cast<decltype(
+                                            config_ -> m_Smoothing.m_SmoothPix)
+                                            -> (val);
             break;
-        case specConfigParams::CONTROL_SETTINGS:
-            measConfig -> m_Control.m_StrobeControl = val -> strobe;
-            measConfig -> m_Control.m_LaserDelay = val -> delay;
-            measConfig -> m_Control.m_LaserWidth = val -> width;
-            measConfig -> m_Control.m_LaserWaveLength = val -> wavelength;
-            measConfig -> m_Control.m_StoreToRam = val -> store_to_ram;
+        case specConfigParams::SMOOTH_MODEL:
+            config_ -> m_Smoothing.m_SmoothModel = static_cast<decltype(
+                                          config_ -> m_Smoothing.m_SmoothModel)
+                                          -> (val);
+            break;
+        case specConfigParams::MODE:
+            config_ -> m_Trigger.m_Mode = static_cast<decltype(
+                                          config -> m_Trigger.m_Mode)
+                                          -> (val);
+            break;
+        case specConfigParams::SOURCE:
+            config_ -> m_Trigger.m_Source = static_cast<decltype(
+                                            config_ -> m_Trigger.m_Source)
+                                            -> (val);
+            break;
+        case specConfigParams::SOURCE_TYPE:
+            config_ -> m_Trigger.m_SourceType = static_cast<decltype(
+                                             config_ -> m_Trigger.m_SourceType)
+                                             -> val;
+            break;
+        case specConfigParams::STROBE_CONTROL:
+            config_ -> m_Control.m_StrobeControl = static_cast<decltype(
+                                          config_ -> m_Control.m_StrobeControl)
+                                          -> (val);
+            break;
+        case specConfigParams::LASER_DELAY:
+            config_ -> m_Control.m_LaserDelay = static_cast<decltype(
+                                             config_ -> m_Control.m_LaserDelay)
+                                             -> (val);
+            break;
+        case specConfigParams::LASER_WIDTH:
+            config_ -> m_Control.m_LaserWidth = static_cast<decltype(
+                                             config_ -> m_Control.m_LaserWidth)
+                                             -> (val);
+            break;
+        case specConfigParams::LASER_WAVELENGTH:
+            config_ -> m_Control.m_LaserWaveLength = static_cast<decltype(
+                                        config_ -> m_Control.m_LaserWaveLength)
+                                        -> val;
+        case specConfigParams::STORE_TO_RAM:
+            config_ -> m_Control.m_StoreToRam = static_cast<decltype(
+                                            config_ -> m_Control.m_StoreToRam)
+                                            -> val;
             break;
     }
 }
 
 template<class T>
-bool SpectrometerConfig::checkandSetVal(T val, specConfigParams valConfig, int lower, int upper, MeasConfigType* measConfig)
+bool SpectrometerConfig::checkandSetVal(specConfigParams val_type,
+                                        T val, int lower, int upper)
 {
-    if(!checkValRange(val, lower, upper))
+    if(checkValRange(val, lower, upper))
     {
-        setVal(val, valConfig, measConfig)
+        setVal(val, val_type);
         return 1;
     }
     else
@@ -112,84 +178,104 @@ bool SpectrometerConfig::checkandSetVal(T val, specConfigParams valConfig, int l
     }
 }
 
-bool SpectrometerConfig::setStartPixel(unsigned short val,
-                                       MeasConfigType* measConfig)
+bool SpectrometerConfig::setStartPixel(unsigned short val)
 {
-    int LOWER = 0;
-    int UPPER = 4095;
-    specConfigParams valConfig = specConfigParams::START_PIXEL;
-    return checkandSetVal(val, valConfig, LOWER, UPPER, measConfig)
+    return checkandSetVal(specConfigParams::START_PIXEL,
+                          val, 0, 4095);
 }
 
-bool SpectrometerConfig::setStopPixel(unsigned short val,
-                                      MeasConfigType* measConfig)
+bool SpectrometerConfig::setStopPixel(unsigned short val)
 {
-    int LOWER = 0;
-    int UPPER = 4095;
-    specConfigParams valConfig = specConfigParams::STOP_PIXEL;
-    return checkandSetVal(val, valConfig, LOWER, UPPER, measConfig)
+    return checkandSetVal(specConfigParams::STOP_PIXEL,
+                          val, 0, 4095);
 }
 
-bool SpectrometerConfig::setIntegrationTime(float val,
-                                            MeasConfigType* measConfig)
+bool SpectrometerConfig::setIntegrationTime(float val)
 {
-    int LOWER = 0.002;
-    int UPPER = 600000;
-    specConfigParams valConfig = specConfigParams::INTEGRATION_TIME;
-    return checkandSetVal(val, valConfig, LOWER, UPPER, measConfig)
+    return checkandSetVal(specConfigParams::INTEGRATION_TIME, 
+                          val, 0.002, 600000);
 }
 
-bool SpectrometerConfig::setIntegrationDelay(unsigned int val,
-                                             MeasConfigType* measConfig)
+bool SpectrometerConfig::setIntegrationDelay(unsigned int val)
 {
-    int LOWER = 0;
-    int UPPER = 0xFFFFFFFF;
-    specConfigParams valConfig = specConfigParams::INTEGRATION_DELAY;
-    return checkandSetVal(val, valConfig, LOWER, UPPER, measConfig)
+    return checkandSetVal(specConfigParams::INTEGRATION_DELAY,
+                          val, 0, 0xFFFFFFFF);
 }
 
-
-bool SpectrometerConfig::setNumberAverages(unsigned int val,
-                                           MeasConfigType* measConfig)
+bool SpectrometerConfig::setNumberAverages(unsigned int val)
 {
-    int LOWER = 1;
-    int UPPER = 0xFFFFFFFF;
-    specConfigParams valConfig = specConfigParams::NUMBER_AVERAGES;
-    return checkandSetVal(val, valConfig, LOWER, UPPER, measConfig)
+    return checkandSetVal(specConfigParams::NUMBER_AVERAGES,
+                          val, 1, 0xFFFFFFFF);
 }
 
-bool SpectrometerConfig::setCorDynDark(DarkCorrectionType val,
-                                       MeasConfigType* measConfig)
+bool SpectrometerConfig::setEnable(unsigned char val)
 {
-    int LOWER = 0;
-    int UPPER = 4095;
-    specConfigParams valConfig = specConfigParams::COR_DYN_DARK;
-    return checkandSetVal(val, valConfig, LOWER, UPPER, measConfig)
+    return checkandSetVal(specConfigParams::ENABLE,
+                          val, 0, 1);
 }
 
-bool SpectrometerConfig::setSmoothing(SmoothingType val,
-                                      MeasConfigType* measConfig)
+bool SpectrometerConfig::setForgetPercentage(unsigned char val)
 {
-    int LOWER = 0;
-    int UPPER = 4095;
-    specConfigParams valConfig = specConfigParams::SMOOTHING;
-    return checkandSetVal(val, valConfig, LOWER, UPPER, measConfig)
+    return checkandSetVal(specConfigParams::FORGET_PERCENTAGE,
+                          val, 0, 100);
 }
 
-bool SpectrometerConfig::setTrigger(TriggerType val,
-                                    MeasConfigType* measConfig)
+bool SpectrometerConfig::setSmoothPixel(unsigned short val)
 {
-    int LOWER = 0;
-    int UPPER = 4095;
-    specConfigParams valConfig = specConfigParams::TRIGGER;
-    return checkandSetVal(val, valConfig, LOWER, UPPER, measConfig)
+    return checkandSetVal(specConfigParams::SMOOTH_PIXEL,
+                          val, 0, 2048);
 }
 
-bool SpectrometerConfig::setControlSettings(ControlSettingsType val,
-                                            MeasConfigType* measConfig)
+bool SpectrometerConfig::setSmoothModel(unsigned char val)
 {
-    int LOWER = 0;
-    int UPPER = 4095;
-    specConfigParams valConfig = specConfigParams::CONTROL_SETTINGS;
-    return checkandSetVal(val, valConfig, LOWER, UPPER, measConfig)
+    return checkandSetVal(specConfigParams::SMOOTH_MODEL,
+                          val, 0, 0);
+}
+
+bool SpectrometerConfig::setMode(unsigned char val)
+{
+    return checkandSetVal(SpectrometerConfig::MODE,
+                         val, 0, 2);
+}
+
+bool SpectrometerConfig::setSource(unsigned char val)
+{
+    return checkandSetVal(SpectrometerConfig::SOURCE,
+                         val, 0, 1);
+}
+
+bool SpectrometerConfig::setSourceType(unsigned char val)
+{
+    return checkandSetVal(SpectrometerConfig::SOURCE_TYPE,
+                          val, 0, 1);
+}
+
+bool SpectrometerConfig::setStrobeControl(unsigned short val)
+{
+    return checkandSetVal(SpectrometerConfig::STROBE_CONTROL,
+                          val, 0, 0xFFFF);
+}
+
+bool SpectrometerConfig::setLaserDelay(unsigned int val)
+{
+    return checkandSetVal(SpectrometerConfig::LASER_DELAY,
+                          val, 0, 0xFFFFFFFF);
+}
+
+bool SpectrometerConfig::setLaserWidth(unsigned int val)
+{
+    return checkandSetVal(SpectrometerConfig::LASER_WIDTH,
+                          val, 0, 0xFFFF);
+}
+
+bool SpectrometerConfig::setLaserWavelength(float val)
+{
+    return checkandSetVal(SpectrometerConfig::LASER_WAVELENGTH,
+                          val, 0, 0xFFFF);
+}
+
+bool SpectrometerConfig::setStoreToRam(unsigned short val)
+{
+    return checkandSetVal(SpectrometerConfig::STORE_TO_RAM,
+                          val, 0, 0xFFFF);
 }
