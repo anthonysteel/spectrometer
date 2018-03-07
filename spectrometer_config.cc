@@ -67,7 +67,13 @@ class SpectrometerConfig
         float _laser_wavelength;
         unsigned short _store_to_ram;
 
+        template<class TYPE>
+        bool setVal(TYPE* _property, 
+                    bool (*comparisonFunction) (TYPE, TYPE, TYPE),
+                    TYPE val, TYPE lower, TYPE upper);
 
+        template<class TYPE>
+        bool boundedComparison(TYPE val, TYPE lower, TYPE upper);
 };
 
 template<class TYPE>
