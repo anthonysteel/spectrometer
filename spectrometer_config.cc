@@ -68,18 +68,18 @@ template<class TYPE> class SpectrometerConfig
         unsigned short _store_to_ram;
 
         bool setVal(TYPE* _property, 
-                    bool (*comparisonFunction) (TYPE, TYPE, TYPE),
+                    bool (*checkFunction) (TYPE, TYPE, TYPE),
                     TYPE val, TYPE lower, TYPE upper);
 
-        bool boundedComparison(TYPE val, TYPE lower, TYPE upper);
+        bool checkInBounds(TYPE val, TYPE lower, TYPE upper);
 };
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setVal(TYPE* _property,
-                                bool (*comparisonFunction) (TYPE, TYPE, TYPE),
+                                bool (*checkFunction) (TYPE, TYPE, TYPE),
                                 TYPE val, TYPE lower, TYPE upper)
 {
-    if(comparisonFunction(val, lower, upper))
+    if(checkFunction(val, lower, upper))
     {
         *_property = val;
         return 1;
@@ -92,7 +92,7 @@ bool SpectrometerConfig<TYPE>::setVal(TYPE* _property,
                                   
 
 template<class TYPE>
-bool SpectrometerConfig<TYPE>::boundedComparison(TYPE val, TYPE lower, TYPE upper)
+bool SpectrometerConfig<TYPE>::checkInBounds(TYPE val, TYPE lower, TYPE upper)
 {
     return val >= lower && val <= upper;
 }
@@ -101,117 +101,117 @@ template<class TYPE>
 bool SpectrometerConfig<TYPE>::setStartPixel(unsigned short val)
 {
     unsigned short lower = 0, upper = 4095;
-    return setVal(&_start_pixel, &boundedComparison, val, lower, upper);
+    return setVal(&_start_pixel, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setStopPixel(unsigned short val)
 {
     unsigned short lower = 0, upper = 4095;
-    return setVal(&_stop_pixel, &boundedComparison, val, lower, upper);
+    return setVal(&_stop_pixel, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setIntegrationTime(float val)
 {
     float lower = 0.002, upper = 600000.0;
-    return setVal(&_integration_time, &boundedComparison, val, lower, upper);
+    return setVal(&_integration_time, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setIntegrationDelay(unsigned int val)
 {
     unsigned int lower = 0x0, upper = 0xFFFFFFFF;
-    return setVal(&_integration_delay, &boundedComparison, val, lower, upper);
+    return setVal(&_integration_delay, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setNumberAverages(unsigned int val)
 {
     unsigned int lower = 0x1, upper = 0xFFFFFFFF;
-    return setVal(&_number_averages, &boundedComparison, val, lower, upper);
+    return setVal(&_number_averages, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setEnable(unsigned char val)
 {
     unsigned char lower = 0, upper = 1;
-    return setVal(&_enable, &boundedComparison, val, lower, upper);
+    return setVal(&_enable, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setForgetPercentage(unsigned char val)
 {
     unsigned char lower = 0, upper = 100;
-    return setVal( _forget_percentage, &boundedComparison, val, lower, upper);
+    return setVal( _forget_percentage, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setSmoothPixel(unsigned short val)
 {
     unsigned short lower = 0, upper = 2048;
-    return setVal(&_smooth_pixel, &boundedComparison, val, lower, upper);
+    return setVal(&_smooth_pixel, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setSmoothModel(unsigned char val)
 {
     unsigned char lower = 0, upper = 0;
-    return setVal(&_smooth_model, &boundedComparison, val, lower, upper);
+    return setVal(&_smooth_model, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setMode(unsigned char val)
 {
     unsigned char lower = 0, upper = 2;
-    return setVal(&_mode, &boundedComparison, val, lower, upper);
+    return setVal(&_mode, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setSource(unsigned char val)
 {
     unsigned char lower = 0, upper = 1;
-    return setVal(&_source, &boundedComparison, val, lower, upper);
+    return setVal(&_source, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setSourceType(unsigned char val)
 {
     unsigned char lower = 0, upper = 1;
-    return setVal(&_source_type, &boundedComparison, val, lower, upper);
+    return setVal(&_source_type, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setStrobeControl(unsigned short val)
 {
     unsigned short lower = 0x0, upper = 0xFFFF;
-    return setVal(&_strobe_control, &boundedComparison, val, lower, upper);
+    return setVal(&_strobe_control, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setLaserDelay(unsigned int val)
 {
     unsigned int lower = 0, upper = 0xFFFFFFFF;
-    return setVal(&_laser_delay, &boundedComparison, val, lower, upper);
+    return setVal(&_laser_delay, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setLaserWidth(unsigned int val)
 {
     unsigned int lower = 0, upper = 0xFFFF;
-    return setVal(&_laser_width, &boundedComparison, val, lower, upper);
+    return setVal(&_laser_width, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setLaserWavelength(float val)
 {
     float lower = 0, upper = 0xFFFF;
-    return setVal(&_laser_wavelength, &boundedComparison, val, lower, upper);
+    return setVal(&_laser_wavelength, &checkInBounds, val, lower, upper);
 }
 
 template<class TYPE>
 bool SpectrometerConfig<TYPE>::setStoreToRam(unsigned short val)
 {
     unsigned short lower = 0, upper = 0xFFFF;
-    return setVal(&_store_to_ram, &boundedComparison, val, lower, upper);
+    return setVal(&_store_to_ram, &checkInBounds, val, lower, upper);
 }
