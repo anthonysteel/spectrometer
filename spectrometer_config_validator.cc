@@ -18,7 +18,6 @@ class SpectrometerConfigurationValidator
 
 
     private:
-        // Helper methods and attributes 
         std::vector<std::string>
         parseRow(std::string row);
 
