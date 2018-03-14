@@ -1,6 +1,6 @@
-start_pixel, uint32, 0, 4095, checkInBounds
-stop_pixel, uint32, 0, 4095, checkInBounds
-integration_delay, uint32, 0x0, 0xFFFFFFF, checkInBounds
-number_averages, uint32, 0x1, 0xFFFFFFF, checkInBounds
-laser_delay, uint32, 0x0, 0xFFFFFFF, checkInBounds
-laser_width, uint32, 0x0, 0xFFFF, checkInBounds
+start_pixel, 0, 4095, checkInBounds
+stop_pixel, 0, 4095, checkInBounds
+integration_delay, 0x0, 0xFFFFFFF, checkInBounds
+number_averages, 0x1, 0xFFFFFFF, checkInBounds
+laser_delay, 0x0, 0xFFFFFFF, checkInBounds
+laser_width, 0x0, 0xFFFF, checkInBounds

@@ -3,29 +3,17 @@
 #include <vector>
 #include <unordered_map>
 #include <fstream>
+#include "type.h"
+#include "spectrometer_structures.h"
 
-typedef unsigned int uint32;
-
-typedef struct spectrometer_configuration_parameter 
-{
-    std::string name;
-    uint32 value;
-} spec_config_param;
-
-struct validator_map_entry 
-{
-    uint32* m_variable;
-    uint32 lower, upper;
-    bool (* validate)(uint32, uint32, uint32);
-}; 
-
+template <class TYPE>
 class SpectrometerConfigurationValidator
 {
     public:
         SpectrometerConfigurationValidator(std::string config_file_path);
 
-        std::vector<struct spectrometer_configuration_parameter>
-        validateUINT32(std::vector<struct spectrometer_configuration_parameter>
+        std::vector<struct spec_config_param<TYPE>>
+        validate(std::vector<struct spec_config_param<TYPE>>
                        config_vector);
 
 
@@ -34,32 +22,35 @@ class SpectrometerConfigurationValidator
         std::vector<std::string>
         parseRow(std::string row);
 
-        uint32 
+        TYPE 
         stringToNumber(std::string num_string);
 
-        std::unordered_map<std::string, struct validator_map_entry>
+        std::unordered_map<std::string, struct validator_map_entry<TYPE>>
         validator_lookup; 
 
-        std::unordered_map<std::string, bool(*)(uint32, uint32, uint32)>
+        std::unordered_map<std::string, bool(*)(TYPE, TYPE, TYPE)>
         check_function_lookup;
 
         void defineCheckFunctionLookup();
 
 };
 
-bool checkInBounds(uint32 value, uint32 lower, uint32 upper)
+template <typename TYPE>
+bool checkInBounds(TYPE value, TYPE lower, TYPE upper)
 {
     return value >= lower && value <= upper;
 }
 
+template<class TYPE>
 void
-SpectrometerConfigurationValidator::defineCheckFunctionLookup()
+SpectrometerConfigurationValidator<TYPE>::defineCheckFunctionLookup()
 {
     check_function_lookup["checkInBounds"] = &checkInBounds;
 }
 
+template<class TYPE>
 std::vector<std::string>
-SpectrometerConfigurationValidator::parseRow(std::string row)
+SpectrometerConfigurationValidator<TYPE>::parseRow(std::string row)
 {
 
     std::string column_value = std::string();
@@ -82,19 +73,22 @@ SpectrometerConfigurationValidator::parseRow(std::string row)
     return parsed;
 }
 
-uint32 
-SpectrometerConfigurationValidator::stringToNumber(std::string num_string)
+template <class TYPE>
+TYPE
+SpectrometerConfigurationValidator<TYPE>::stringToNumber(std::string num_string)
 {
-    uint32 uint32_type = 0U;
-    return std::stoi(num_string, nullptr, uint32_type);
+    std::string::size_type sz;
+    TYPE var = static_cast<TYPE>(std::stof(num_string, &sz));
+    return var;
 }
 
-SpectrometerConfigurationValidator::
+template <class TYPE>
+SpectrometerConfigurationValidator<TYPE>::
 SpectrometerConfigurationValidator(std::string config_file_path)
 {
     std::string row;
     std::ifstream config_file;
-    std::vector<std::vector<std::string>> parsed_row;
+    std::vector<std::vector<std::string>> parsed_rows;
 
     defineCheckFunctionLookup();
 
@@ -103,18 +97,21 @@ SpectrometerConfigurationValidator(std::string config_file_path)
     {
         while(std::getline(config_file, row))
         {
-            parsed_row.push_back(parseRow(row));
+            parsed_rows.push_back(parseRow(row));
         }
-        for (const std::vector<std::string> &v : parsed_row)
+
+        for (const std::vector<std::string> &row : parsed_rows)
         {
-            std::string param_name = v[0], type = v[1]; 
-            uint32 lower = stringToNumber(v[2]), upper = stringToNumber(v[3]);
+            std::string param_name = row[0]; 
+
+            TYPE lower = stringToNumber(row[1]),
+                   upper = stringToNumber(row[2]);
 
             bool (*check_function) (uint32, uint32, uint32) = 
-            check_function_lookup[v[4]];
+            check_function_lookup[row[3]];
 
             validator_lookup[param_name] =
-                validator_map_entry 
+                validator_map_entry<TYPE>
                 {
                     .lower = lower,
                     .upper = upper,
@@ -127,44 +124,46 @@ SpectrometerConfigurationValidator(std::string config_file_path)
 }
     
 
-std::vector<struct spectrometer_configuration_parameter>
-SpectrometerConfigurationValidator::
-validateUINT32(std::vector
-               <struct spectrometer_configuration_parameter> config_vector)
+template <class TYPE>
+std::vector<struct spec_config_param<TYPE>>
+SpectrometerConfigurationValidator<TYPE>::
+validate(std::vector<struct spec_config_param<TYPE>> config_vector)
 {
-    for(auto param=config_vector.begin(); param!=config_vector.end(); ++param)
-    {
-        validator_map_entry entry = validator_lookup[param->name];
+    std::vector<struct spec_config_param<TYPE>> validated_config_vector;
 
-        if(!entry.validate(param->value, entry.lower, entry.upper))
+    for(const spec_config_param<TYPE> &param : config_vector)
+    {
+        validator_map_entry<TYPE> entry = validator_lookup[param.name];
+
+        if(entry.validate(param.value, entry.lower, entry.upper))
         {
-            config_vector.erase(param);
+            validated_config_vector.push_back(param);
         }
     }
 
-    return config_vector;
+    return validated_config_vector;
 }
 
 
 int main()
 {
-    std::vector<struct spectrometer_configuration_parameter>
+    std::vector<struct spec_config_param<uint32>>
     configuration_vector = { 
-        spec_config_param {
+        spec_config_param<uint32> {
             .name = "start_pixel",
             .value = 4100U
         },
-        spec_config_param {
+        spec_config_param<uint32> {
             .name = "stop_pixel",
             .value = 15U
         }
     };
 
-    SpectrometerConfigurationValidator 
+    SpectrometerConfigurationValidator<uint32>
     validator("./config/spectrometer_config.csv");
 
-    std::vector<struct spectrometer_configuration_parameter>
-    validated_configuration = validator.validateUINT32(configuration_vector);
+    std::vector<struct spec_config_param<uint32>>
+    validated_configuration = validator.validate(configuration_vector);
 
     std::cout << std::endl;
     std::cout << "validated configuration vector" << std::endl;
