@@ -13,29 +13,31 @@ class SpectrometerConfigurationValidator
         SpectrometerConfigurationValidator(std::string config_file_path);
 
         std::vector<struct spec_config_param<TYPE>>
-        validate(std::vector<struct spec_config_param<TYPE>>
-                       config_vector);
+                validate(std::vector<struct spec_config_param<TYPE>>
+                         config_vector);
 
 
     private:
         std::vector<std::string>
         parseRow(std::string row);
 
-        TYPE 
+        TYPE
         stringToNumber(std::string num_string);
 
         std::unordered_map<std::string, struct validator_map_entry<TYPE>>
-        validator_lookup; 
+                    validator_lookup;
 
         std::unordered_map<std::string, bool(*)(TYPE, TYPE, TYPE)>
         check_function_lookup;
 
-        void defineCheckFunctionLookup();
+        void
+        defineCheckFunctionLookup();
 
 };
 
 template <typename TYPE>
-bool checkInBounds(TYPE value, TYPE lower, TYPE upper)
+bool
+checkInBounds(TYPE value, TYPE lower, TYPE upper)
 {
     return value >= lower && value <= upper;
 }
@@ -55,9 +57,10 @@ SpectrometerConfigurationValidator<TYPE>::parseRow(std::string row)
     std::string column_value = std::string();
     std::vector<std::string> parsed;
     char COMMA = 0x2c, SPACE = 0x20;
+
     for(char& c : row)
     {
-        if(c == COMMA) 
+        if(c == COMMA)
         {
             parsed.push_back(column_value);
             column_value = std::string();
@@ -67,6 +70,7 @@ SpectrometerConfigurationValidator<TYPE>::parseRow(std::string row)
             column_value += c;
         }
     }
+
     parsed.push_back(column_value);
 
     return parsed;
@@ -92,6 +96,7 @@ SpectrometerConfigurationValidator(std::string config_file_path)
     defineCheckFunctionLookup();
 
     config_file.open(config_file_path);
+
     if(config_file.is_open())
     {
         while(std::getline(config_file, row))
@@ -101,27 +106,27 @@ SpectrometerConfigurationValidator(std::string config_file_path)
 
         for (const std::vector<std::string> &row : parsed_rows)
         {
-            std::string param_name = row[0]; 
+            std::string param_name = row[0];
 
             TYPE lower = stringToNumber(row[1]),
-                   upper = stringToNumber(row[2]);
+                 upper = stringToNumber(row[2]);
 
-            bool (*check_function) (uint32, uint32, uint32) = 
-            check_function_lookup[row[3]];
+            bool (*check_function) (TYPE, TYPE, TYPE) =
+                check_function_lookup[row[3]];
 
             validator_lookup[param_name] =
                 validator_map_entry<TYPE>
-                {
-                    .lower = lower,
-                    .upper = upper,
-                    .validate = check_function
-                };
+            {
+                .lower = lower,
+                .upper = upper,
+                .validate = check_function
+            };
         }
 
         config_file.close();
     }
 }
-    
+
 
 template <class TYPE>
 std::vector<struct spec_config_param<TYPE>>
@@ -144,10 +149,12 @@ validate(std::vector<struct spec_config_param<TYPE>> config_vector)
 }
 
 
-int main()
+int
+main()
 {
     std::vector<struct spec_config_param<uint32>>
-    configuration_vector = { 
+                configuration_vector =
+    {
         spec_config_param<uint32> {
             .name = "start_pixel",
             .value = 4100U
@@ -159,13 +166,14 @@ int main()
     };
 
     SpectrometerConfigurationValidator<uint32>
-    validator("./config/spectrometer_config.csv");
+    validator("/Users/anthonysteel/Documents/school/teams/spectrometer/config/spectrometer_config.csv");
 
     std::vector<struct spec_config_param<uint32>>
-    validated_configuration = validator.validate(configuration_vector);
+            validated_configuration = validator.validate(configuration_vector);
 
     std::cout << std::endl;
     std::cout << "validated configuration vector" << std::endl;
+
     for(const auto& param : validated_configuration)
     {
         std::cout << "    " << param.name << std::endl;
@@ -173,6 +181,7 @@ int main()
 
     std::cout << std::endl;
     std::cout << "unvalidated configuration vector" << std::endl;
+
     for(const auto& param : configuration_vector)
     {
         std::cout << "    " << param.name << std::endl;
