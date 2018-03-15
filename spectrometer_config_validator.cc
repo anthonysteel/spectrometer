@@ -166,7 +166,7 @@ main()
     };
 
     SpectrometerConfigurationValidator<uint32>
-    validator("/Users/anthonysteel/Documents/school/teams/spectrometer/config/spectrometer_config.csv");
+    validator("/Users/anthonysteel/Documents/school/teams/spectrometer/config_spectrometer/spectrometer_config.csv");
 
     std::vector<struct spec_config_param<uint32>>
             validated_configuration = validator.validate(configuration_vector);
