@@ -104,22 +104,22 @@ SpectrometerConfigurationValidator(std::string config_file_path)
             parsed_rows.push_back(parseRow(row));
         }
 
-        for (const std::vector<std::string> &row : parsed_rows)
+        for (const std::vector<std::string>&line : parsed_rows)
         {
-            std::string param_name = row[0];
+            std::string param_name = line[0];
 
-            TYPE lower = stringToNumber(row[1]),
-                 upper = stringToNumber(row[2]);
+            TYPE lower = stringToNumber(line[1]),
+                 upper = stringToNumber(line[2]);
 
             bool (*check_function) (TYPE, TYPE, TYPE) =
-                check_function_lookup[row[3]];
+                check_function_lookup[line[3]];
 
             validator_lookup[param_name] =
                 validator_map_entry<TYPE>
             {
-                .lower = lower,
-                .upper = upper,
-                .validate = check_function
+                lower = lower,
+                upper = upper,
+                check_function = check_function
             };
         }
 
@@ -156,12 +156,12 @@ main()
                 configuration_vector =
     {
         spec_config_param<uint32> {
-            .name = "start_pixel",
-            .value = 4100U
+            "start_pixel",
+            4100U
         },
         spec_config_param<uint32> {
-            .name = "stop_pixel",
-            .value = 15U
+            "stop_pixel",
+            15U
         }
     };
 
