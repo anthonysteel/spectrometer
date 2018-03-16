@@ -1,3 +1,6 @@
+#ifndef SPECTROMETER_CONFIG_VALIDATOR
+#define SPECTROMETER_CONFIG_VALIDATOR
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -24,11 +27,17 @@ class SpectrometerConfigurationValidator
         TYPE
         stringToNumber(std::string num_string);
 
+        std::unordered_map<std::string, std::string>
+        config_path_lookup;
+
         std::unordered_map<std::string, struct validator_map_entry<TYPE>>
-                    validator_lookup;
+        validator_lookup;
 
         std::unordered_map<std::string, bool(*)(TYPE, TYPE, TYPE)>
         check_function_lookup;
+
+        void
+        defineConfigPathLookup();
 
         void
         defineCheckFunctionLookup();
@@ -42,11 +51,43 @@ checkInBounds(TYPE value, TYPE lower, TYPE upper)
     return value >= lower && value <= upper;
 }
 
+template <typename TYPE>
+bool
+checkInRange(TYPE val, TYPE lower, TYPE upper)
+{
+    for(TYPE i = lower; i <= upper; i++)
+    {
+        if(val == i)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+template<class TYPE>
+void
+SpectrometerConfigurationValidator<TYPE>::defineConfigPathLookup()
+{
+    config_path_lookup["uint32"] = 
+    "/Users/anthonysteel/Documents/school/teams/spectrometer/config/uint32.csv";
+
+    config_path_lookup["float"] = 
+    "/Users/anthonysteel/Documents/school/teams/spectrometer/config/float.csv";
+
+    config_path_lookup["uint16"] =
+    "/Users/anthonysteel/Documents/school/teams/spectrometer/config/uint16.csv";
+
+    config_path_lookup["uint8"] =
+    "/Users/anthonysteel/Documents/school/teams/spectrometer/config/uint8.csv";
+}
+
 template<class TYPE>
 void
 SpectrometerConfigurationValidator<TYPE>::defineCheckFunctionLookup()
 {
     check_function_lookup["checkInBounds"] = &checkInBounds;
+    check_function_lookup["checkInRange"] = &checkInRange;
 }
 
 template<class TYPE>
@@ -87,15 +128,16 @@ SpectrometerConfigurationValidator<TYPE>::stringToNumber(std::string num_string)
 
 template <class TYPE>
 SpectrometerConfigurationValidator<TYPE>::
-SpectrometerConfigurationValidator(std::string config_file_path)
+SpectrometerConfigurationValidator(std::string type)
 {
     std::string row;
     std::ifstream config_file;
     std::vector<std::vector<std::string>> parsed_rows;
 
+    defineConfigPathLookup();
     defineCheckFunctionLookup();
 
-    config_file.open(config_file_path);
+    config_file.open(config_path_lookup[type]);
 
     if(config_file.is_open())
     {
@@ -147,45 +189,4 @@ validate(std::vector<struct spec_config_param<TYPE>> config_vector)
 
     return validated_config_vector;
 }
-
-
-int
-main()
-{
-    std::vector<struct spec_config_param<uint32>>
-                configuration_vector =
-    {
-        spec_config_param<uint32> {
-            "start_pixel",
-            4100U
-        },
-        spec_config_param<uint32> {
-            "stop_pixel",
-            15U
-        }
-    };
-
-    SpectrometerConfigurationValidator<uint32>
-    validator("/Users/anthonysteel/Documents/school/teams/spectrometer/config_spectrometer/spectrometer_config.csv");
-
-    std::vector<struct spec_config_param<uint32>>
-            validated_configuration = validator.validate(configuration_vector);
-
-    std::cout << std::endl;
-    std::cout << "validated configuration vector" << std::endl;
-
-    for(const auto& param : validated_configuration)
-    {
-        std::cout << "    " << param.name << std::endl;
-    }
-
-    std::cout << std::endl;
-    std::cout << "unvalidated configuration vector" << std::endl;
-
-    for(const auto& param : configuration_vector)
-    {
-        std::cout << "    " << param.name << std::endl;
-    }
-
-    return 0;
-}
+#endif
