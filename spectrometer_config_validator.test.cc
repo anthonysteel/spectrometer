@@ -82,29 +82,58 @@ TEST(FLOATValidator, RemoveOutOfBoundValue)
 
 TEST(UINT16Validator, RemoveOutOfBoundValue)
 {
-    std::vector<struct spec_config_param<float>>
+    std::vector<struct spec_config_param<uint16>>
     config_vector =
     {
-        spec_config_param<float> {
+        spec_config_param<uint16> {
             "strobe_control",
             0x40
         },
-        spec_config_param<float> {
+        spec_config_param<uint16> {
             "smooth_pixel",
             2050 
         }
     };
 
-    std::vector<struct spec_config_param<float>>
+    std::vector<struct spec_config_param<uint16>>
     expected_vector =
     {
-        spec_config_param<float> {
+        spec_config_param<uint16> {
             "strobe_control",
             0x40
         }
     };
 
-    RemoveOutOfBoundValue<float>("uint16",
+    RemoveOutOfBoundValue<uint16>("uint16",
+            config_vector,
+            expected_vector);
+}
+
+TEST(UINT8Validator, RemoveOutOfBoundValue)
+{
+    std::vector<struct spec_config_param<uint8>>
+    config_vector =
+    {
+        spec_config_param<uint8> {
+            "enable",
+            2
+        },
+        spec_config_param<uint8> {
+            "smooth_model",
+            0 
+        }
+    };
+
+    std::vector<struct spec_config_param<uint8>>
+    expected_vector =
+    {
+        spec_config_param<uint8> {
+            "smooth_model",
+            0
+        }
+    };
+
+    RemoveOutOfBoundValue<uint8>("uint8",
             config_vector,
             expected_vector);
 }
