@@ -1,0 +1,2 @@
+strobe_control, 0, 0XFFFF, checkInBounds
+smooth_pixel, 0, 2048, checkInRange
