@@ -5,16 +5,16 @@
 
 template <typename TYPE>
 void RemoveOutOfBoundValue(std::string type,
-        std::vector<struct spec_config_param<TYPE>> config_vector,
-        std::vector<struct spec_config_param<TYPE>> expected_vector)
+        std::vector<struct spec_config_param> config_vector,
+        std::vector<struct spec_config_param> expected_vector)
 {
     SpectrometerConfigurationValidator<TYPE>
     validator(type);
 
-    std::vector<struct spec_config_param<TYPE>>
+    std::vector<struct spec_config_param>
     validated_config = validator.validate(config_vector);
 
-    for(typename std::vector<struct spec_config_param<TYPE>>::size_type
+    for(typename std::vector<struct spec_config_param>::size_type
         i = 0; i != validated_config.size(); i++)
     {
         EXPECT_EQ(expected_vector[i].name, validated_config[i].name);
@@ -24,25 +24,33 @@ void RemoveOutOfBoundValue(std::string type,
 
 TEST(UINT32Validator, RemoveOutOfBoundValue)
 {
-    std::vector<struct spec_config_param<uint32>>
+    std::vector<struct spec_config_param>
     config_vector =
     {
-        spec_config_param<uint32> {
+        spec_config_param {
+            "uint32",
             "start_pixel",
-            4100U
+            "4100"
         },
-        spec_config_param<uint32> {
+        spec_config_param {
+            "uint32",
             "stop_pixel",
-            15U
+            "15"
         }
     };
 
-    std::vector<struct spec_config_param<uint32>>
+    std::vector<struct spec_config_param>
     expected_vector =
     {
-        spec_config_param<uint32> {
+        spec_config_param {
+            "INVALID",
+            "start_pixel",
+            "4100"
+        },
+        spec_config_param {
+            "uint32",
             "stop_pixel",
-            15U
+            "15"
         }
     };
 
@@ -53,25 +61,33 @@ TEST(UINT32Validator, RemoveOutOfBoundValue)
 
 TEST(FLOATValidator, RemoveOutOfBoundValue)
 {
-    std::vector<struct spec_config_param<float>>
+    std::vector<struct spec_config_param>
     config_vector =
     {
-        spec_config_param<float> {
+        spec_config_param {
+            "float",
             "integration_time",
-            0.0 
+            "0.0"
         },
-        spec_config_param<float> {
+        spec_config_param {
+            "float",
             "laser_wavelength",
-            0x32 
+            "0x32"
         }
     };
 
-    std::vector<struct spec_config_param<float>>
+    std::vector<struct spec_config_param>
     expected_vector =
     {
-        spec_config_param<float> {
+        spec_config_param {
+            "INVALID",
+            "integration_time",
+            "0.0"
+        },
+        spec_config_param {
+            "float",
             "laser_wavelength",
-            0x32 
+            "0x32"
         }
     };
 
@@ -82,25 +98,33 @@ TEST(FLOATValidator, RemoveOutOfBoundValue)
 
 TEST(UINT16Validator, RemoveOutOfBoundValue)
 {
-    std::vector<struct spec_config_param<uint16>>
+    std::vector<struct spec_config_param>
     config_vector =
     {
-        spec_config_param<uint16> {
+        spec_config_param {
+            "uint16",
             "strobe_control",
-            0x40
+            "0x40"
         },
-        spec_config_param<uint16> {
+        spec_config_param {
+            "uint16",
             "smooth_pixel",
-            2050 
+            "2050"
         }
     };
 
-    std::vector<struct spec_config_param<uint16>>
+    std::vector<struct spec_config_param>
     expected_vector =
     {
-        spec_config_param<uint16> {
+        spec_config_param {
+            "uint16",
             "strobe_control",
-            0x40
+            "0x40"
+        },
+        spec_config_param {
+            "INVALID",
+            "smooth_pixel",
+            "2050"
         }
     };
 
@@ -111,25 +135,33 @@ TEST(UINT16Validator, RemoveOutOfBoundValue)
 
 TEST(UINT8Validator, RemoveOutOfBoundValue)
 {
-    std::vector<struct spec_config_param<uint8>>
+    std::vector<struct spec_config_param>
     config_vector =
     {
-        spec_config_param<uint8> {
+        spec_config_param {
+            "uint8",
             "enable",
-            2
+            "2"
         },
-        spec_config_param<uint8> {
+        spec_config_param {
+            "uint8",
             "smooth_model",
-            0 
+            "0"
         }
     };
 
-    std::vector<struct spec_config_param<uint8>>
+    std::vector<struct spec_config_param>
     expected_vector =
     {
-        spec_config_param<uint8> {
+        spec_config_param {
+            "INVALID",
+            "enable",
+            "2"
+        },
+        spec_config_param {
+            "uint8",
             "smooth_model",
-            0
+            "0"
         }
     };
 
