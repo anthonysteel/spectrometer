@@ -1,72 +1,113 @@
-// IMPORTANT
-// *****************************************************************************
-// Variable names currently respect the names used in the AvaSpec documentation.
-// This made it easier to debug the initial spectrometer code. A decision needs
-// to be made by the team which is more valuable:
-//     a) Have names that are more indicitive of the of the variables. 
-//        Makes it easier for a newcomer to understand the code at a glance.
-//     b) Respect the AvaSpec documentation. Makes it easy to go back and 
-//        reference.
-// I prefer a) as it minimizes the amount of time spent trying to figure out
-// what is going on. A more experienced team member should be able to understand
-// the relationship beetween our class and the Avaspec documentation when they
-// need to.
-// *****************************************************************************
-
-
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <unordered_map>
 #include <time.h>
 #include <sys/types.h>
 #include "avaspec.h"
-#include "avaspec-configure.h"
-#include "Spectrometer.h"
-#include "log.h"
+#include "spectrometer_structures.h"
+#include "spectrometer_config_validator.h"
 
-#define USB 1
-
-void delay(int number_of_seconds)
+class Spectrometer
 {
-	// Converting time into milli_seconds
-	int milli_seconds = 1000 * number_of_seconds;
+    public:
+        Spectrometer(std::vector<struct spec_config_param> config_vector);
 
-	// Storing start time
-	clock_t start_time = clock();
+    private:
+        MeasConfigType spec_config;
+        void assignMeasConfigType(struct spec_config_param param);
 
-	// looping till required time is not acheived
-	while (clock() < start_time + milli_seconds);
+        std::unordered_map<std::string, uint32>
+        UINT32_config_lookup;
+
+        std::unordered_map<std::string, uint16>
+        UINT16_config_lookup;
+
+        std::unordered_map<std::string, uint8>
+        UINT8_config_lookup;
+
+        std::unordered_map<std::string, uint32>
+        FLOAT_config_lookup;
+
+        void defineConfigLookup();
+
+        SpectrometerConfigurationvalidator UINT32_validator;
+        SpectrometerConfigurationvalidator UINT16_validator;
+        SpectrometerConfigurationvalidator UINT8_validator;
+        SpectrometerConfigurationvalidator FLOAT_validator;
+}
+
+void
+Spectrometer::defineConfigLookup()
+{
+    UINT32_config_lookup["start_pixel"] = &spec_config.m_StartPixel;
+    UINT32_config_lookup["stop_pixel"] = &spec_config.m_StopPixel;
+    UINT32_config_lookup["integration_delay"] = &spec_config
+                                                .m_IntegrationDelay;
+    UINT32_config_lookup["number_averages"] = &spec_config.m_NrAverages;
+    UINT32_config_lookup["laser_delay"] = &spec_config.m_Control.m_LaserDelay;
+    UINT32_config_lookup["laser_width"] = &spec_config.m_Control.m_LaserWidth;
+    UINT16_config_lookup["smooth_pixel"] = &spec_config.m_Smoothing
+                                                .m_SmoothPix;
+    UINT16_config_lookup["strobe_control"] = &spec_config.m_Control
+                                                .m_StrobeControl;
+    UINT8_config_lookup["enable"] = &spec_config.m_CorDynDark.m_Enable;
+    UINT8_config_lookup["forget_percentage"] = &spec_config.m_CorDynDark
+                                              .m_ForgetPercentage;
+    UINT8_config_lookup["smooth_model"] = &spec_config.m_Smoothing
+                                         .m_SmoothModel;
+    UINT8_config_lookup["mode"] = &spec_config.m_Trigger.m_Mode;
+    UINT8_config_lookup["source"] = &spec_config.m_Trigger.m_Source;
+    UINT8_config_lookup["source_type"] = &spec_config.m_Trigger.m_SourceType;
+    FLOAT_config_lookup["laser_wavelength"] = &spec_config.m_Control
+                                             .m_LaserWaveLength;
+    FLOAT_config_lookup["integration_time"] = &spec_config.m_IntegrationTime;
+}
+
+void
+Spectrometer::assignMeasConfigType(struct spec_config_param param)
+{
+    if(param.type == "uint32")
+    {
+        *UINT32_config_lookup[param.name] = param.value;
+    }
+    else if(param.type == "uint16")
+    {
+        *UINT16_config_lookup[param.name] = param.value;
+    }
+    else if(param.type == "uint8")
+    {
+        *UINT8_config_lookup[param.name] = param.value;
+    }
+    else if(param.type == "float")
+    {
+        *FLOAT_config_lookup[param.name] = param.value;
+    }
 }
 
 
-// *****************************************************************************
-// Function:  constructor 
-//
-//  \brief:   Allocate memory for the configuration, timelabel, and data buffer.   
-//
-// *****************************************************************************
-Spectrometer::Spectrometer()
+Spectrometer::Spectrometer(std::vector<struct spec_config_param> config_vector)
 {
-    a_pMeasConfig  = (MeasConfigType*) malloc(sizeof(MeasConfigType));	
+    for(const struct spec_config_param& param : config_vector)
+    {
+        if(param.type == "uint32" && UINT32_validator.validate(param) 
+           || param.type = "uint16" && UINT16_validator.validate(param) 
+           || param.type = "uint8" && UINT8_validator.validate(param)
+           || param.type = "float" && FLOAT_validator.validate(param))
+        {
+            assignMeasConfigType(param);
+        }
+    }
 
-	a_pTimeLabel = (unsigned int*) malloc(sizeof(unsigned int) * 100);
-
-	buffer = (double*) malloc(sizeof(double) * 2047);
+    setAvaSpecParameters(spec_config); 
+    AVS_PrepareMeasure(a_hDevice, a_pMeasConfig);
 }
 
-
-// *****************************************************************************
-// Function:  activate 
-//
-//  \brief:   Makes appropriate calls to AvaSpec library to initialize the
-//            spectrometer on USB port. Creates device handle necessary for
-//            other AvaSpec library calls.
-//
-// *****************************************************************************
 void Spectrometer::activate()
 {
 	unsigned int ByteSet;
 
-	int port = USB;
+	int port = 1; // USB
 
 	AvsIdentityType a_pList[30];
 
@@ -80,14 +121,6 @@ void Spectrometer::activate()
 
 }
 
-
-// *****************************************************************************
-// Function:  setMeasureConfig 
-//
-//  \brief:   Sets spectrometer condiguration parameters currently specified
-//            by setAvaSpecParameters in src/payload1/avaspec-config.cc.
-//
-// *****************************************************************************
 void Spectrometer::setMeasureConfig()
 {
 	setAvaSpecParameters(a_pMeasConfig);	
@@ -105,13 +138,6 @@ void Spectrometer::setMeasureConfig()
 
 }
 
-// *****************************************************************************
-// Function:  measure 
-//
-//  \brief:   Takes measurement and then reads buffer in spectrometer RAM 
-//            into Spectrometer.buffer 
-//
-// *****************************************************************************
 void Spectrometer::measure()
 {
 	int msmt_sts = AVS_MeasureCallback( a_hDevice, NULL, 1 );
