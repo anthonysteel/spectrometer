@@ -1,11 +1,11 @@
 #ifndef SPECTOMETER_STRUCTURES_H
 #define SPECTOMETER_STRUCTURES_H
 
-template <typename TYPE>
 struct spec_config_param
 {
+    std::string type;
     std::string name;
-    TYPE value;
+    std::string value;
 };
 
 template <typename TYPE>
