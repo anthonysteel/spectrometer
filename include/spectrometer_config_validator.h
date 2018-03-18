@@ -15,10 +15,13 @@ class SpectrometerConfigurationValidator
     public:
         SpectrometerConfigurationValidator(std::string config_file_path);
 
-        std::vector<struct spec_config_param<TYPE>>
-                validate(std::vector<struct spec_config_param<TYPE>>
-                         config_vector);
+        std::vector<struct spec_config_param>
+        validate(std::vector<struct spec_config_param>
+                 config_vector);
 
+        bool
+        validate(struct spec_config_param
+                 config_vector);
 
     private:
         std::vector<std::string>
@@ -55,9 +58,9 @@ template <typename TYPE>
 bool
 checkInRange(TYPE val, TYPE lower, TYPE upper)
 {
-    for(TYPE i = lower; i <= upper; i++)
+    for(TYPE num = lower; num <= upper; num++)
     {
-        if(val == i)
+        if(val == num)
         {
             return 1;
         }
@@ -171,22 +174,54 @@ SpectrometerConfigurationValidator(std::string type)
 
 
 template <class TYPE>
-std::vector<struct spec_config_param<TYPE>>
+std::vector<struct spec_config_param>
 SpectrometerConfigurationValidator<TYPE>::
-validate(std::vector<struct spec_config_param<TYPE>> config_vector)
+validate(std::vector<struct spec_config_param> config_vector)
 {
-    std::vector<struct spec_config_param<TYPE>> validated_config_vector;
+    std::vector<struct spec_config_param> validated_config_vector;
 
-    for(const spec_config_param<TYPE> &param : config_vector)
+    for(const spec_config_param &param : config_vector)
     {
         validator_map_entry<TYPE> entry = validator_lookup[param.name];
 
-        if(entry.validate(param.value, entry.lower, entry.upper))
+        TYPE value = stringToNumber(param.value);
+
+        if(entry.validate(value, entry.lower, entry.upper))
         {
             validated_config_vector.push_back(param);
+        }
+        else
+        {
+            validated_config_vector.push_back(spec_config_param {
+                    "INVALID",
+                    param.name,
+                    param.value
+                    });
         }
     }
 
     return validated_config_vector;
+}
+
+template <class TYPE>
+bool
+SpectrometerConfigurationValidator<TYPE>::
+validate(struct spec_config_param param)
+{
+    std::vector<struct spec_config_param> validated_config_vector;
+
+    validator_map_entry<TYPE> entry = validator_lookup[param.name];
+
+    TYPE value = stringToNumber(param.value);
+
+    if(entry.validate(value, entry.lower, entry.upper))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
 }
 #endif
