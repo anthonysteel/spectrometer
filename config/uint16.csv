@@ -1,2 +1,4 @@
 strobe_control, 0, 0XFFFF, checkInBounds
 smooth_pixel, 0, 2048, checkInRange
+start_pixel, 0, 4095, checkInBounds
+stop_pixel, 0, 4095, checkInBounds
