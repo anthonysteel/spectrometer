@@ -65,7 +65,7 @@ public:
         unsigned int* timeLabel, 
         double* spectrum ) -> DLL_INT
     {
-        AVS_GetScopeData(device, timeLabel, spectrum);
+        return AVS_GetScopeData(device, timeLabel, spectrum);
     }
 
 private:
