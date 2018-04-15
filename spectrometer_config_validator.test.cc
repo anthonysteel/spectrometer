@@ -169,3 +169,11 @@ TEST(UINT8Validator, RemoveOutOfBoundValue)
             config_vector,
             expected_vector);
 }
+
+int main(int argc, char **argv) 
+{
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
+
+/* vim: set ts=4 sw=4 et :*/
