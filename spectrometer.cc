@@ -1,49 +1,4 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <sys/types.h>
-#include <unistd.h>
-
-#include "avaspec.h"
-#include "spectrometer_structures.h"
-#include "spectrometer_config_validator.h"
-#include "stringToNumber.h"
-
-
-class Spectrometer
-{
-    public:
-        Spectrometer(std::vector<struct spec_config_param> config_vector);
-
-        void activate();
-        
-        std::vector<double> measure();
-    private:
-        MeasConfigType spec_config;
-        void assignMeasConfigType(struct spec_config_param param);
-
-        std::unordered_map<std::string, uint32*>
-        UINT32_config_lookup;
-
-        std::unordered_map<std::string, uint16*>
-        UINT16_config_lookup;
-
-        std::unordered_map<std::string, uint8*>
-        UINT8_config_lookup;
-
-        std::unordered_map<std::string, float*>
-        FLOAT_config_lookup;
-
-        void defineConfigLookup();
-
-        SpectrometerConfigurationValidator<uint32> UINT32_validator;
-        SpectrometerConfigurationValidator<uint16> UINT16_validator;
-        SpectrometerConfigurationValidator<uint8> UINT8_validator;
-        SpectrometerConfigurationValidator<float> FLOAT_validator;
-
-        AvsHandle device_id;
-};
+#include "spectrometer.h"
 
 void
 Spectrometer::defineConfigLookup()
@@ -98,12 +53,16 @@ Spectrometer::assignMeasConfigType(struct spec_config_param param)
 }
 
 
-Spectrometer::Spectrometer(std::vector<struct spec_config_param> config_vector)
-:UINT32_validator("uint32"),
-UINT16_validator("uint16"),
-UINT8_validator("uint8"),
-FLOAT_validator("float")
+Spectrometer::Spectrometer(
+    const std::vector<struct spec_config_param>& config_vector,
+    const std::shared_ptr<AvaSpecConnection>& avaspec)
+: UINT32_validator("uint32")
+, UINT16_validator("uint16")
+, UINT8_validator("uint8")
+, FLOAT_validator("float")
+, connector_(avaspec)
 {
+    /**
     for(const struct spec_config_param& param : config_vector)
     {
         if((param.type == "uint32" && UINT32_validator.validate(param))
@@ -115,6 +74,7 @@ FLOAT_validator("float")
         }
     }
     //setAvaSpecParameters(spec_config); 
+    */
 }
 
 void Spectrometer::activate()
@@ -122,14 +82,16 @@ void Spectrometer::activate()
 	AvsIdentityType device_id_info[30];
 
 	int USB_port = 1; 
-	AVS_Init(USB_port); 
+	connector_->Init(USB_port);
 
+	/*
 	AVS_UpdateUSBDevices();
 	
 	unsigned int required_bytes;
 	AVS_GetList(sizeof(device_id_info), &required_bytes, device_id_info);
 
 	device_id = AVS_Activate( &device_id_info[0] );
+	*/
 }
 
 std::vector<double> Spectrometer::measure()

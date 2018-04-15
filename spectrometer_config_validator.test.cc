@@ -1,7 +1,12 @@
+#include <memory>
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "spectrometer_config_validator.h"
 #include "spectrometer_structures.h"
+#include "spectrometer.h"
 #include "type.h"
+
+#include "mock/MockAvaSpecConnection.h"
 
 template <typename TYPE>
 void RemoveOutOfBoundValue(std::string type,
@@ -21,6 +26,60 @@ void RemoveOutOfBoundValue(std::string type,
         EXPECT_EQ(expected_vector[i].value, validated_config[i].value);
     }
 }
+
+class SpectrometerTest : public ::testing::Test
+{
+protected:
+    SpectrometerTest()
+    : mockConnection_(std::make_shared<MockAvaSpecConnection>())
+    {}
+
+    // Code that runs in every test
+    virtual void SetUp()
+    {
+    }
+
+    // Code that tears down every test goes here
+    virtual void TearDown()
+    {}
+
+    // Member objects available to all tests
+    // Mock a connection to the spectrometer to allow for testing
+    std::shared_ptr<MockAvaSpecConnection> mockConnection_;
+    // Default parameters for configuration 
+    std::vector<struct spec_config_param>
+    config_vector_ =
+    {
+        spec_config_param {
+            "uint32",
+            "start_pixel",
+            "4100"
+        },
+        spec_config_param {
+            "uint32",
+            "stop_pixel",
+            "15"
+        }
+    };
+
+
+};
+
+TEST_F(SpectrometerTest, InitializeConnection)
+{
+    using ::testing::Return;
+    using ::testing::AtLeast;
+
+    Spectrometer s(config_vector_, mockConnection_);
+    EXPECT_CALL(*mockConnection_, Init(1))
+    .Times(AtLeast(1))
+    .WillOnce(Return(0)) // first call returns 0
+    .WillOnce(Return(1)); // second call returns 1;
+
+    s.activate();
+}
+
+/**
 
 TEST(UINT32Validator, RemoveOutOfBoundValue)
 {
@@ -169,6 +228,7 @@ TEST(UINT8Validator, RemoveOutOfBoundValue)
             config_vector,
             expected_vector);
 }
+*/
 
 int main(int argc, char **argv) 
 {

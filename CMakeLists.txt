@@ -52,10 +52,12 @@ target_link_libraries(spectrometer
 add_executable(SpecTest spectrometer_config_validator.test.cc)
 target_include_directories(SpecTest PUBLIC
     ${CMAKE_SOURCE_DIR}/include/
+    ${CMAKE_SOURCE_DIR}/mock/
 )
 target_link_libraries(SpecTest
     spectrometer
     GTest
+    GMock
 )
 add_test(NAME SpecTest COMMAND SpecTest)
 
