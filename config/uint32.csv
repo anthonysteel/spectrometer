@@ -1,4 +1,0 @@
-integration_delay, 0x0, 0xFFFFFFF, checkInBounds
-number_averages, 0x1, 0xFFFFFFF, checkInBounds
-laser_delay, 0x0, 0xFFFFFFF, checkInBounds
-laser_width, 0x0, 0xFFFF, checkInBounds

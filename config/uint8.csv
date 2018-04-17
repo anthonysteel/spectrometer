@@ -1,7 +1,0 @@
-enable, 0, 1, checkInRange
-forget_percentage, 0, 1, checkInRange
-smooth_model, 0, 0, checkInRange
-staturation_detection, 0, 2, checkInRange
-mode, 0, 2, checkInRange
-source, 0, 1, checkInRange
-source_type, 0, 1, checkInRange
