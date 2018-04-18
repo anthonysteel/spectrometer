@@ -1,3 +1,6 @@
+#ifndef STRING_TO_NUMBER_H
+#define STRING_TO_NUMBER_H
+
 template <typename TYPE>
 TYPE
 stringToNumber(std::string num_string)
@@ -6,3 +9,5 @@ stringToNumber(std::string num_string)
     TYPE var = static_cast<TYPE>(std::stof(num_string, &sz));
     return var;
 }
+
+#endif

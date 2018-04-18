@@ -1,13 +1,5 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <sys/types.h>
 #include <unistd.h>
-
-#include "avaspec.h"
-#include "spectrometer_structures.h"
-#include "spectrometer_config_validator.h"
+#include <string>
 #include "spectrometer.h"
 
 void
@@ -38,48 +30,50 @@ Spectrometer::defineConfigLookup()
 }
 
 void
-Spectrometer::assignMeasConfigType(struct spec_config_param param)
+Spectrometer::assignMeasConfigType(spec_config_param param)
 {
-    if(param.type == "uint32")
+    if(UINT32_config_lookup[param.name])
     {
         *UINT32_config_lookup[param.name] = 
         ::stringToNumber<uint32>(param.value);
     }
-    else if(param.type == "uint16")
+    else if(UINT32_config_lookup[param.name])
     {
         *UINT16_config_lookup[param.name] = 
         ::stringToNumber<uint16>(param.value);
     }
-    else if(param.type == "uint8")
+    else if(UINT32_config_lookup[param.name])
     {
         *UINT8_config_lookup[param.name] =
         ::stringToNumber<uint8>(param.value);
     }
-    else if(param.type == "float")
+    else if(UINT32_config_lookup[param.name])
     {
         *FLOAT_config_lookup[param.name] = 
         ::stringToNumber<float>(param.value);
     }
+    else
+    {
+        std::cout << 
+        "The param type did not match one of the config types" <<
+        std::endl;
+    }
 }
 
 
-Spectrometer::Spectrometer(std::vector<struct spec_config_param> config_vector)
-:UINT32_validator("uint32"),
-UINT16_validator("uint16"),
-UINT8_validator("uint8"),
-FLOAT_validator("float")
+Spectrometer::Spectrometer(std::vector<spec_config_param> config_vector)
 {
-    for(const struct spec_config_param& param : config_vector)
+    for(const spec_config_param& param : config_vector)
     {
-        if((param.type == "uint32" && UINT32_validator.validate(param))
-           || (param.type == "uint16" && UINT16_validator.validate(param))
-           || (param.type == "uint8" && UINT8_validator.validate(param))
-           || (param.type == "float" && FLOAT_validator.validate(param)))
+        if (SpecConfigValidator.validate(param))
         {
             assignMeasConfigType(param);
         }
+        else
+        {
+            std::cout << "Param didn't validate" << std::endl;
+        }
     }
-    //setAvaSpecParameters(spec_config); 
 }
 
 void Spectrometer::activate()

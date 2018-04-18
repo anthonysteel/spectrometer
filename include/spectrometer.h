@@ -1,19 +1,19 @@
 #include "avaspec.h"
-#include "spectrometer_structures.h"
-#include "spectrometer_config_validator.h"
+#include "validator.h"
+#include "validator_structures.h"
 #include "stringToNumber.h"
 
 class Spectrometer
 {
     public:
-        Spectrometer(std::vector<struct spec_config_param> config_vector);
+        Spectrometer(std::vector<spec_config_param> config_vector);
 
         void activate();
         
         std::vector<double> measure();
     private:
         MeasConfigType spec_config;
-        void assignMeasConfigType(struct spec_config_param param);
+        void assignMeasConfigType(spec_config_param param);
 
         std::unordered_map<std::string, uint32*>
         UINT32_config_lookup;
@@ -29,10 +29,7 @@ class Spectrometer
 
         void defineConfigLookup();
 
-        SpectrometerConfigurationValidator<uint32> UINT32_validator;
-        SpectrometerConfigurationValidator<uint16> UINT16_validator;
-        SpectrometerConfigurationValidator<uint8> UINT8_validator;
-        SpectrometerConfigurationValidator<float> FLOAT_validator;
+        Validator SpecConfigValidator;
 
         AvsHandle device_id;
 };
