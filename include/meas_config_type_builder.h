@@ -5,7 +5,7 @@
 #include "avaspec.h"
 #include <iostream>
 #include <vector>
-#include "validator_structures.h"
+#include "spectrometer_structures.h"
 #include "stringToNumber.h"
 
 class MeasConfigTypeBuilder

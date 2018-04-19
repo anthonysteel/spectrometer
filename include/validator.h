@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <fstream>
 #include "type.h"
-#include "validator_structures.h"
+#include "spectrometer_structures.h"
 #include "stringToNumber.h"
 
 class Validator

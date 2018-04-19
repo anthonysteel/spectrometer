@@ -1,18 +1,15 @@
-#ifndef SPECTOMETER_STRUCTURES_H
-#define SPECTOMETER_STRUCTURES_H
+#ifndef VALIDATOR_STRUCTURES_H 
+#define VALIDATOR_STRUCTURES_H
 
-struct spec_config_param
+typedef struct 
 {
-    std::string type;
     std::string name;
     std::string value;
-};
+} spec_config_param;
 
-template <typename TYPE>
-struct validator_map_entry 
+typedef struct 
 {
-    TYPE lower, upper;
-    bool (* validate)(TYPE, TYPE, TYPE);
-}; 
-#endif
+    std::string type, lower, upper;
+} validator_map_entry; 
 
+#endif
