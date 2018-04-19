@@ -13,5 +13,6 @@ uint16, strobe_control, 0, 0XFFFF, checkInBounds
 uint16, smooth_pixel, 0, 2048, checkInRange
 uint16, start_pixel, 0, 4095, checkInBounds
 uint16, stop_pixel, 0, 4095, checkInBounds
+uint16, store_to_ram, 0, 0xFFFF, checkInBounds
 float, integration_time, 0.002, 6000000.0, checkInBounds
 float, laser_wavelength, 0, 0XFFFF, checkInBounds

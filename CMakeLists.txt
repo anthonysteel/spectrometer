@@ -38,6 +38,11 @@ endif()
 ########################
 # Spectrometer Library #
 ########################
+add_library(validator validator.cc)
+target_include_directories(validator PUBLIC
+    ${CMAKE_SOURCE_DIR}/include/
+)
+
 add_library(spectrometer spectrometer.cc)
 target_include_directories(spectrometer PUBLIC
     ${CMAKE_SOURCE_DIR}/include/

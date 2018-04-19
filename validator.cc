@@ -101,17 +101,3 @@ validate(spec_config_param unvalidated_param)
         return 0;
     }
 }
-
-int main()
-{
-    spec_config_param param = {
-        "laser_wavelength",
-        "50"
-    };
-
-    Validator spec_config_validator;
-
-    std::cout << spec_config_validator.validate(param) << std::endl;
-
-    return 0;
-}
