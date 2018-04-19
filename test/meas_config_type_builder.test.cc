@@ -130,7 +130,6 @@ TEST(MeasConfigTypeBuilder, Build)
     EXPECT_EQ(spec_config.m_Control.m_LaserWidth, 10000);
     EXPECT_EQ(spec_config.m_Control.m_LaserWaveLength, 1);
     EXPECT_EQ(spec_config.m_Control.m_StoreToRam, 5);
- 
 }
 
 int main(int argc, char **argv) 
