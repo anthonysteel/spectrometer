@@ -1,5 +1,5 @@
 uint8, enable, 0, 1, checkInRange
-uint8, forget_percentage, 0, 1, checkInRange
+uint8, forget_percentage, 0, 100, checkInRange
 uint8, smooth_model, 0, 0, checkInRange
 uint8, staturation_detection, 0, 2, checkInRange
 uint8, mode, 0, 2, checkInRange

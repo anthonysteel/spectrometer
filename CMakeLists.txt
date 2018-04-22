@@ -36,12 +36,24 @@ if(UNIX)
 endif()
 
 ########################
-# Spectrometer Library #
+# Validator Library #
 ########################
 add_library(validator validator.cc)
 target_include_directories(validator PUBLIC
     ${CMAKE_SOURCE_DIR}/include/
 )
+
+####################################
+# Meas Config Type Builder Library #
+####################################
+add_library(meas_config_type_builder meas_config_type_builder.cc)
+target_include_directories(meas_config_type_builder PUBLIC
+    ${CMAKE_SOURCE_DIR}/include/
+)
+
+########################
+# Spectrometer Library #
+########################
 
 add_library(spectrometer spectrometer.cc)
 target_include_directories(spectrometer PUBLIC
@@ -49,12 +61,14 @@ target_include_directories(spectrometer PUBLIC
 )
 target_link_libraries(spectrometer
     AvaSpec
+    validator
+    meas_config_type_builder
 )
 
 ###################
 # Test Validation #
 ###################
-add_executable(SpecTest spectrometer_config_validator.test.cc)
+add_executable(SpecTest test/spectrometer.test.cc)
 target_include_directories(SpecTest PUBLIC
     ${CMAKE_SOURCE_DIR}/include/
 )

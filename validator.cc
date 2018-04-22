@@ -4,7 +4,8 @@
 #include <unordered_map>
 #include <fstream>
 #include "type.h"
-#include "validator_structures.h"
+#include "validator.h"
+#include "spectrometer_structures.h"
 #include "stringToNumber.h"
 
 std::vector<std::string>
@@ -40,7 +41,7 @@ Validator()
     std::ifstream config_file;
     std::vector<std::vector<std::string>> parsed_rows;
     
-    config_file.open("config/meas_config.csv");
+    config_file.open("/home/anthonysteel/Documents/spectrometer/config/meas_config.csv");
 
     if (config_file.is_open())
     {
@@ -76,6 +77,7 @@ validate(spec_config_param unvalidated_param)
 
     validator_map_entry entry = validator_lookup[unvalidated_param.name];
 
+    //std::cout << unvalidated_param.name << " " << entry.type<< std::endl;
     if (entry.type == "uint32")
     {
         return validate_entry<uint32>(unvalidated_param, entry);

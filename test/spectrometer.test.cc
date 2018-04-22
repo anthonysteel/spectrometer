@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 #include "spectrometer.h"
-#include "validator.h"
-#include "validator_structures.h"
+#include "spectrometer_structures.h"
 #include <vector>
 #include "type.h"
 

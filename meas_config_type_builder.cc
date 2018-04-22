@@ -15,7 +15,7 @@ MeasConfigTypeBuilder()
 														 .m_StrobeControl;
 	UINT16_config_lookup["start_pixel"] = &spec_config.m_StartPixel;
 	UINT16_config_lookup["stop_pixel"] = &spec_config.m_StopPixel;
-    UINT16_config_lookup["store_to_ram"] = &spec_config.m_Control.
+    UINT16_config_lookup["store_to_ram"] = &spec_config.m_Control
                                                        .m_StoreToRam;
 	UINT8_config_lookup["enable"] = &spec_config.m_CorDynDark.m_Enable;
 	UINT8_config_lookup["forget_percentage"] = &spec_config.m_CorDynDark

@@ -1,15 +1,16 @@
 #include <unistd.h>
 #include <string>
 #include "spectrometer.h"
+#include "validator.h"
 #include "meas_config_type_builder.h"
 
 Spectrometer::Spectrometer(std::vector<spec_config_param> config_vector)
 :SpecConfigValidator()
 {
-    defineConfigLookup();
-
     for(const spec_config_param& param : config_vector)
     {
+        std::cout << param.name << " " << param.value << " " 
+        << SpecConfigValidator.validate(param) << std::endl;
         if (SpecConfigValidator.validate(param))
         {
             MeasConfigTypeBuilder meas_config_type_builder;
