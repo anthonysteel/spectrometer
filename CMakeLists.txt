@@ -32,6 +32,7 @@ if(UNIX)
     )
     target_link_libraries(AvaSpec INTERFACE
         avs
+        usb-1.0
     )
 endif()
 

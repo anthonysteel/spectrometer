@@ -11,13 +11,11 @@
 class MeasConfigTypeBuilder
 {
     public:
-        MeasConfigTypeBuilder();
+        MeasConfigType spec_config;
 
         MeasConfigType build(std::vector<spec_config_param> config_vector);
 
     private:
-        MeasConfigType 
-        spec_config;
 
         std::unordered_map<std::string, uint32*>
         UINT32_config_lookup;

@@ -41,7 +41,7 @@ Validator()
     std::ifstream config_file;
     std::vector<std::vector<std::string>> parsed_rows;
     
-    config_file.open("/home/anthonysteel/Documents/spectrometer/config/meas_config.csv");
+    config_file.open("/home/pi/spectrometer/config/meas_config.csv");
 
     if (config_file.is_open())
     {

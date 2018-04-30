@@ -31,7 +31,7 @@ void Spectrometer::activate()
 	int USB_port = 1; 
 	AVS_Init(USB_port); 
 
-	AVS_UpdateUSBDevices();
+	//AVS_UpdateUSBDevices();
 	
 	unsigned int required_bytes;
 	AVS_GetList(sizeof(device_id_info), &required_bytes, device_id_info);

@@ -26,7 +26,7 @@ TEST(MeasConfigTypeBuilder, Build)
         {"store_to_ram", "5"}
     };    
 
-    measconfigtype spec_config = meas_config_type_builder.build(config_vector);
+    MeasConfigType spec_config = meas_config_type_builder.build(config_vector);
 
     std::cout <<
         "start pixel: " <<
