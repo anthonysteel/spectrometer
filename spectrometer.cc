@@ -69,8 +69,5 @@ std::vector<double> Spectrometer::measure()
        spec_measurement_data.push_back(data_buffer[i]);
 	}
 
-    //delete[] data_buffer;
-    //delete[] time_label;
-
     return spec_measurement_data;
 }
