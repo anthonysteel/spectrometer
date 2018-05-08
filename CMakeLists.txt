@@ -39,7 +39,7 @@ endif()
 ########################
 # Validator Library #
 ########################
-add_library(validator validator.cc)
+add_library(validator ${CMAKE_SOURCE_DIR}/src/validator.cc)
 target_include_directories(validator PUBLIC
     ${CMAKE_SOURCE_DIR}/include/
 )
@@ -47,7 +47,7 @@ target_include_directories(validator PUBLIC
 ####################################
 # Meas Config Type Builder Library #
 ####################################
-add_library(meas_config_type_builder meas_config_type_builder.cc)
+add_library(meas_config_type_builder ${CMAKE_SOURCE_DIR}/src/meas_config_type_builder.cc)
 target_include_directories(meas_config_type_builder PUBLIC
     ${CMAKE_SOURCE_DIR}/include/
 )
@@ -56,7 +56,7 @@ target_include_directories(meas_config_type_builder PUBLIC
 # Spectrometer Library #
 ########################
 
-add_library(spectrometer spectrometer.cc)
+add_library(spectrometer ${CMAKE_SOURCE_DIR}/src/spectrometer.cc)
 target_include_directories(spectrometer PUBLIC
     ${CMAKE_SOURCE_DIR}/include/
 )
