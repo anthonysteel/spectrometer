@@ -20,7 +20,7 @@ build(std::vector<spec_config_param> config_vector)
         }
         else if (param.name == "laser_width")
         {
-            spec_config.m_Control.m_LaserDelay = stringToNumber<uint32>(param.value);
+            spec_config.m_Control.m_LaserWidth = stringToNumber<uint32>(param.value);
         }
         else if (param.name == "smooth_pixel")
         {
