@@ -4,7 +4,8 @@
 #include "validator.h"
 #include "meas_config_type_builder.h"
 
-Spectrometer::Spectrometer(std::vector<spec_config_param> config_vector)
+Spectrometer::
+Spectrometer(std::vector<spec_config_param> config_vector)
 {
     SpecConfigValidator;
 
@@ -23,7 +24,9 @@ Spectrometer::Spectrometer(std::vector<spec_config_param> config_vector)
     }
 }
 
-void Spectrometer::activate()
+void 
+Spectrometer::
+activate()
 {
 	AvsIdentityType device_id_info[30];
 
@@ -41,7 +44,9 @@ void Spectrometer::activate()
     AVS_PrepareMeasure(device_id, &spec_config);
 }
 
-std::vector<double> Spectrometer::measure()
+std::vector<double> 
+Spectrometer::
+measure()
 {
 	int msmt_sts = AVS_MeasureCallback( device_id, NULL, 1 );
 	
