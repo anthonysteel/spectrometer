@@ -37,3 +37,6 @@ This defines a standard spectrometer configuration, instatiates, and activates
 the spectrometer. The spectrometer has a ```measure()``` method which returns
 a ```vector``` of ```doubles``` where each index corresponds to a bin at a 
 given frequency and the value is the count at that frequency.
+
+Make sure to run the executable that includes this class with ```sudo``` 
+privileges otherwise the program will not have access to the AvaSpec hardware.
