@@ -1,4 +1,4 @@
-#AvaSpec Mini Spectrometer
+# AvaSpec Mini Spectrometer
 
 This library allows data to be read from an AvaSpec Mini Spectrometer.
 The source files are located in the ```src``` directory. 
