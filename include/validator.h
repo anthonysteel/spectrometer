@@ -27,8 +27,6 @@ class Validator
         bool
         validate_entry(spec_config_param unvalidated_param,
                        validator_map_entry entry);
-
-
 };
 
 template <class TYPE>
