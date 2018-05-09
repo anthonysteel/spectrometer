@@ -8,7 +8,7 @@ The constructor accepts a configuration ```vector``` with
 ```spec_config_param``` values. ```spec_config_param``` are a struct with two
 properties ```name``` and ```value```. AvaSpec parameters can be set in the
 configuration vector by defining ```spec_config param```'s. For example:
-```C++
+```cpp
 std::vector<spec_config_param> config_vector =
 {
     {"start_pixel", "0"},
@@ -36,7 +36,16 @@ AvaSpecMini.activate();
 This defines a standard spectrometer configuration, instatiates, and activates
 the spectrometer. The spectrometer has a ```measure()``` method which returns
 a ```vector``` of ```doubles``` where each index corresponds to a bin at a 
-given frequency and the value is the count at that frequency.
+given frequency and the value is the count at that frequency. For example:
 
-Make sure to run the executable that includes this class with ```sudo``` 
+```cpp
+std::vector<double> data = AvaSpecMini.measure();
+```
+The class will check the values entered in the ```config_vector``` against the
+upper and lower bounds set for that value in the AvaSpec documentation. 
+
+
+On Linux make sure to run the program using the spectrometer class with ```sudo``` 
 privileges otherwise the program will not have access to the AvaSpec hardware.
+The the spectrometer library ```libavs``` distributed by AvaSpec
+must be installed.

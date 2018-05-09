@@ -10,7 +10,7 @@ TEST(Parser, parseRow)
     std::vector<std::vector<std::string>> parsed_rows;
     Parser csv_parser;
     
-    config_file.open("/home/pi/spectrometer/test/parser.csv");
+    config_file.open("/home/anthonysteel/Documents/spectrometer/test/parser.csv");
 
     if (config_file.is_open())
     {
