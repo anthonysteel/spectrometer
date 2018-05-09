@@ -79,4 +79,14 @@ target_link_libraries(SpecTest
 )
 add_test(NAME SpecTest COMMAND SpecTest)
 
+add_executable(MeasTest test/meas_config_type_builder.test.cc)
+target_include_directories(MeasTest PUBLIC
+    ${CMAKE_SOURCE_DIR}/include/
+)
+target_link_libraries(MeasTest
+    meas_config_type_builder
+    GTest
+)
+add_test(NAME MeasTest COMMAND MeasTest)
+
 # vim: set ts=4 sw=4 et :
