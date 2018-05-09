@@ -9,6 +9,8 @@ The constructor accepts a configuration ```vector``` with
 properties ```name``` and ```value```. AvaSpec parameters can be set in the
 configuration vector by defining ```spec_config param```'s. For example:
 ```cpp
+#include "spectrometer.h"
+
 std::vector<spec_config_param> config_vector =
 {
     {"start_pixel", "0"},
