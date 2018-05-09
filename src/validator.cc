@@ -1,38 +1,4 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <fstream>
-#include "type.h"
 #include "validator.h"
-#include "spectrometer_structures.h"
-#include "stringToNumber.h"
-
-std::vector<std::string>
-Validator::
-parseRow(std::string row)
-{
-    std::string column_value = std::string();
-    std::vector<std::string> parsed;
-    char COMMA = 0x2c, SPACE = 0x20;
-
-    for (char& c : row)
-    {
-        if (c == COMMA)
-        {
-            parsed.push_back(column_value);
-            column_value = std::string();
-        }
-        else if (c != SPACE)
-        {
-            column_value += c;
-        }
-    }
-
-    parsed.push_back(column_value);
-
-    return parsed;
-}
 
 Validator::
 Validator()
@@ -40,6 +6,7 @@ Validator()
     std::string row;
     std::ifstream config_file;
     std::vector<std::vector<std::string>> parsed_rows;
+    Parser csv_parser;
     
     config_file.open("/home/pi/spectrometer/config/meas_config.csv");
 
@@ -47,7 +14,7 @@ Validator()
     {
         while (std::getline(config_file, row))    
         {
-            parsed_rows.push_back(parseRow(row));
+            parsed_rows.push_back(csv_parser.parseRow(row));
         }
 
         for (const std::vector<std::string> &line : parsed_rows)

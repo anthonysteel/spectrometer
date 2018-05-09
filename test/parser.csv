@@ -1,0 +1,2 @@
+uint8, source_type, 0, 1, checkInRange
+uint32, integration_delay, 0x0, 0xFFFFFFF, checkInBounds

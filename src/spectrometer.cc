@@ -1,8 +1,4 @@
-#include <unistd.h>
-#include <string>
 #include "spectrometer.h"
-#include "validator.h"
-#include "meas_config_type_builder.h"
 
 Spectrometer::
 Spectrometer(std::vector<spec_config_param> config_vector)

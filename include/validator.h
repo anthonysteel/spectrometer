@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
 #include <fstream>
+#include "parser.h"
 #include "type.h"
 #include "spectrometer_structures.h"
 #include "stringToNumber.h"
@@ -19,12 +20,8 @@ class Validator
         validate(spec_config_param unvalidated_param);
 
     private:
-
         std::unordered_map<std::string, validator_map_entry>
         validator_lookup;
-
-        std::vector<std::string>
-        parseRow(std::string row);
 
         template <class TYPE>
         bool

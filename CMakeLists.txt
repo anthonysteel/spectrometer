@@ -52,6 +52,14 @@ target_include_directories(meas_config_type_builder PUBLIC
     ${CMAKE_SOURCE_DIR}/include/
 )
 
+##################
+# Parser Library #
+##################
+add_library(parser ${CMAKE_SOURCE_DIR}/src/parser.cc)
+target_include_directories(parser PUBLIC
+    ${CMAKE_SOURCE_DIR}/include/
+)
+
 ########################
 # Spectrometer Library #
 ########################
@@ -63,6 +71,7 @@ target_include_directories(spectrometer PUBLIC
 target_link_libraries(spectrometer
     AvaSpec
     validator
+    parser
     meas_config_type_builder
 )
 
@@ -88,5 +97,15 @@ target_link_libraries(MeasTest
     GTest
 )
 add_test(NAME MeasTest COMMAND MeasTest)
+
+add_executable(ParseTest test/parser.test.cc)
+target_include_directories(ParseTest PUBLIC
+    ${CMAKE_SOURCE_DIR}/include/
+)
+target_link_libraries(ParseTest
+    parser
+    GTest
+)
+add_test(NAME ParseTest COMMAND ParseTest)
 
 # vim: set ts=4 sw=4 et :

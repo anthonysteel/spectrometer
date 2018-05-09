@@ -6,6 +6,9 @@
 #include "meas_config_type_builder.h"
 #include "spectrometer_structures.h"
 #include "stringToNumber.h"
+#include <string>
+#include <vector>
+#include <unistd.h>
 
 class Spectrometer
 {
