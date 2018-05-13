@@ -1,0 +1,2 @@
+uint8, saturation_detection, 0, 2, checkInRange
+uint32, integration_delay, 0x0, 0xFFFFFFFF, checkInBounds
