@@ -2,8 +2,8 @@
 
 Spectrometer::
 Spectrometer(std::vector<spec_config_param> config_vector)
+:SpecConfigValidator("/home/pi/spectrometer/config/meas_config.csv")
 {
-    SpecConfigValidator;
 
     for(const spec_config_param& param : config_vector)
     {
@@ -68,4 +68,31 @@ measure()
     delete[] time_label;
 
     return spec_measurement_data;
+}
+
+
+float
+Spectrometer::
+voltageToCelsius(float analog_reading)
+{
+    return 118.69 
+           - 70.361 * analog_reading
+           + 21.02 * pow(analog_reading, 2.0)
+           - 3.6443 * pow(analog_reading, 3.0)
+           + 0.1993 * pow(analog_reading, 4.0);
+}
+
+float
+Spectrometer::
+getThermistor()
+{
+    float *analog_reading = new float;
+
+    AVS_GetAnalogIn(device_id, 0, analog_reading);
+
+    float temperature_reading = voltageToCelsius(*analog_reading);    
+
+    delete analog_reading;
+
+    return temperature_reading;
 }

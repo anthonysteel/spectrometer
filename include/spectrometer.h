@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <unistd.h>
+#include <math.h>
 
 class Spectrometer
 {
@@ -18,10 +19,15 @@ class Spectrometer
         void activate();
         
         std::vector<double> measure();
+
+        float getThermistor();
     private:
-        MeasConfigType spec_config;
+
+        float voltageToCelsius(float analog_reading);
 
         void defineConfigLookup();
+
+        MeasConfigType spec_config;
 
         Validator SpecConfigValidator;
 

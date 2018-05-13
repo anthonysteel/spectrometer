@@ -14,7 +14,7 @@
 class Validator
 {
     public:
-        Validator();
+        Validator(std::string path_to_config);
 
         bool
         validate(spec_config_param unvalidated_param);
