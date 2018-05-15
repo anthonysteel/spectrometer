@@ -8,7 +8,16 @@ Validator(std::string path_to_config)
     std::vector<std::vector<std::string>> parsed_rows;
     Parser csv_parser;
     
-    config_file.open(path_to_config);
+    config_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
+    try
+    {
+        config_file.open(path_to_config);
+    }
+    catch (std::ifstream::failure e)
+    {
+        throw std::runtime_error("Validator config file failed to open. Check file path");
+    }
 
     if (config_file.is_open())
     {
