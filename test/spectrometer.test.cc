@@ -31,6 +31,8 @@ TEST(Spectrometer, measure)
     s.activate();
 
     std::vector<double> data = s.measure();
+
+    s.deactivate();
 }
 
 TEST(Spectrometer, getThermistor)
@@ -58,7 +60,10 @@ TEST(Spectrometer, getThermistor)
 
     Spectrometer s(config_vector);
     s.activate();
+
     float thermistor_value = s.getThermistor();
+
+    s.deactivate();
 }
 
 int main(int argc, char **argv) 

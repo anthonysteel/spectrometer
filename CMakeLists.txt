@@ -52,6 +52,14 @@ target_include_directories(meas_config_type_builder PUBLIC
     ${CMAKE_SOURCE_DIR}/include/
 )
 
+#########################
+# AVS Exception Library #
+#########################
+add_library(avs_exception ${CMAKE_SOURCE_DIR}/src/avs_exception.cc)
+target_include_directories(avs_exception PUBLIC
+    ${CMAKE_SOURCE_DIR}/include/
+)
+
 ##################
 # Parser Library #
 ##################
@@ -71,6 +79,7 @@ target_include_directories(spectrometer PUBLIC
 target_link_libraries(spectrometer
     AvaSpec
     validator
+    avs_exception
     parser
     meas_config_type_builder
 )

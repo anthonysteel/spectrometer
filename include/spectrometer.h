@@ -3,6 +3,7 @@
 
 #include "avaspec.h"
 #include "validator.h"
+#include "avs_exception.h"
 #include "meas_config_type_builder.h"
 #include "spectrometer_structures.h"
 #include "stringToNumber.h"
@@ -17,6 +18,7 @@ class Spectrometer
         Spectrometer(std::vector<spec_config_param> config_vector);
 
         void activate();
+        void deactivate();
         
         std::vector<double> measure();
 
@@ -30,6 +32,8 @@ class Spectrometer
         MeasConfigType spec_config;
 
         Validator SpecConfigValidator;
+
+        AVSException SpecException;
 
         AvsHandle device_id;
 };
