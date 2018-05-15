@@ -2,7 +2,7 @@
 
 Spectrometer::
 Spectrometer(std::vector<spec_config_param> config_vector)
-:SpecConfigValidator("/home/pi/Documents/spectrometer/config/meas_config.csv")
+:SpecConfigValidator("/home/pi/spectrometer/config/meas_config.csv")
 {
 
     for(const spec_config_param& param : config_vector)
