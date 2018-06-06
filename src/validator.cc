@@ -53,7 +53,6 @@ validate(spec_config_param unvalidated_param)
 
     validator_map_entry entry = validator_lookup[unvalidated_param.name];
 
-    //std::cout << unvalidated_param.name << " " << entry.type<< std::endl;
     if (entry.type == "uint32")
     {
         return validate_entry<uint32>(unvalidated_param, entry);
@@ -72,10 +71,8 @@ validate(spec_config_param unvalidated_param)
     }
     else
     {
-        std::cout <<
+        throw std::runtime_error(
         "Validator::Validate did not have an entry type matching: " <<
-        "uint32, uint16, uint8, float" <<
-        std::endl;
-        return 0;
+        "uint32, uint16, uint8, float");
     }
 }
