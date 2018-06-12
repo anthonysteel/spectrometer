@@ -46,6 +46,17 @@ std::vector<double> data = AvaSpecMini.measure();
 The class will check the values entered in the ```config_vector``` against the
 upper and lower bounds set for that value in the AvaSpec documentation. 
 
+If you are developing the code base: 
+To test the project on a *nix system make sure you have cmake installed. Then
+in the project folder run:
+```bash
+mkdir build
+cd build
+cmake ../
+make
+```
+This will generate a few executables to run unit tests (```MeasTest```,
+```ParseTest``` etc.)
 
 On Linux, the program using the spectrometer class must be run with ```sudo``` 
 privileges otherwise the program will not have access to the AvaSpec hardware.
