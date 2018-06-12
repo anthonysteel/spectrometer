@@ -153,13 +153,10 @@ getThermistor()
     int analog_in_return = AVS_GetAnalogIn(device_id, 0, analog_reading);
     if (analog_in_return == 0) {
         float temperature_reading = voltageToCelsius(*analog_reading);
-
         delete analog_reading;
-
         return temperature_reading;
     } else {
         delete analog_reading;
-
         throw std::runtime_error("AVS_GetAnalogIn failed with: "
                                  + SpecException.lookup(analog_in_return));
     }
