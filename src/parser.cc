@@ -8,15 +8,11 @@ parseRow(std::string row)
     std::vector<std::string> parsed;
     char COMMA = 0x2c, SPACE = 0x20;
 
-    for (char& c : row)
-    {
-        if (c == COMMA)
-        {
+    for (char& c : row) {
+        if (c == COMMA) {
             parsed.push_back(column_value);
             column_value = std::string();
-        }
-        else if (c != SPACE)
-        {
+        } else if (c != SPACE) {
             column_value += c;
         }
     }
