@@ -57,7 +57,6 @@ validate(spec_config_param unvalidated_param)
         return validate_entry<float>(unvalidated_param, entry);
     } else {
         throw std::runtime_error(
-            "Validator::Validate did not have an entry type matching: " <<
-            "uint32, uint16, uint8, float");
+            "Validator::Validate did not have an entry type matching: uint32, uint16, uint8, float");
     }
 }
