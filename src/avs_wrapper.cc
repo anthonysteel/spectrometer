@@ -1,6 +1,6 @@
-#include "avs_interface.h"
+#include "avs_wrapper.h"
 
-AVSInterface::AVSInterface(const int &usb_port)
+AVSWrapper::AVSWrapper(const int &usb_port)
 {
     Init(usb_port);
     UpdateUSBDevices();
@@ -8,7 +8,7 @@ AVSInterface::AVSInterface(const int &usb_port)
 }
 
 int
-AVSInterface::Init(const int &usb_port)
+AVSWrapper::Init(const int &usb_port)
 {
     int init_return = AVS_Init(usb_port);
     if (init_return < 0) {
@@ -22,7 +22,7 @@ AVSInterface::Init(const int &usb_port)
 }
 
 int
-AVSInterface::Activate(const int &device_number)
+AVSWrapper::Activate(const int &device_number)
 {
     int activate_return = AVS_Activate(&device_id_info[device_number]);
     if (activate_return < 0) {
@@ -34,7 +34,7 @@ AVSInterface::Activate(const int &device_number)
 }
 
 void
-AVSInterface::Deactivate(const int &device_id)
+AVSWrapper::Deactivate(const int &device_id)
 {
     bool deactivate_return = AVS_Deactivate(device_id);
     if (!deactivate_return) {
@@ -43,7 +43,7 @@ AVSInterface::Deactivate(const int &device_id)
 }
 
 int
-AVSInterface::UpdateUSBDevices(int *required_bytes) {
+AVSWrapper::UpdateUSBDevices(int *required_bytes) {
     int update_usb_return = AVS_UpdateUSBDevices();
     if (update_usb_return < 0) {
         throw std::runtime_error("AVS_UpdateUSBDevices failed with: "
@@ -66,7 +66,7 @@ AVSInterface::UpdateUSBDevices(int *required_bytes) {
 }
 
 void
-AVSInterface::PrepareMeasure(const int &device_id, MeasConfigType spec_config) {
+AVSWrapper::PrepareMeasure(const int &device_id, MeasConfigType spec_config) {
     int prepare_measure_return = AVS_PrepareMeasure(device_id, spec_config);
     if (prepare_measure_return >= 0) {
         throw std::runtime_error("AVS_PrepareMeasure failed with: "
@@ -75,7 +75,7 @@ AVSInterface::PrepareMeasure(const int &device_id, MeasConfigType spec_config) {
 }
 
 void
-AVSInterface::Measure(const int &device_id, const short &num_measurements) {
+AVSWrapper::Measure(const int &device_id, const short &num_measurements) {
     int measure_callback_return = AVS_MeasureCallback(device_id, NULL, 1);
     if (measure_callback_return != 0) {
         throw std::runtime_error("AVS_MeasureCallback failed with: "
@@ -86,7 +86,7 @@ AVSInterface::Measure(const int &device_id, const short &num_measurements) {
 }
 
 int
-AVSInterface::PollScan(const int &device_id) {
+AVSWrapper::PollScan(const int &device_id) {
     pollscan_return = AVS_PollScan(device_id);
     if (pollscan_return != 0) {
         throw std::runtime_error("AVS_PollScan failed with: "
@@ -97,7 +97,7 @@ AVSInterface::PollScan(const int &device_id) {
 }
 
 void
-AVSInterface::GetScopeData(const int &device_id, const int *time_label, double *data_buffer) {
+AVSWrapper::GetScopeData(const int &device_id, const int *time_label, double *data_buffer) {
     int get_data_return = AVS_GetScopeData(device_id, time_label, data_buffer);
     if (get_data_return != 0) {
         throw std::runtime_error("AVS_GetScopeData threw: "
@@ -106,7 +106,7 @@ AVSInterface::GetScopeData(const int &device_id, const int *time_label, double *
 }
 
 void
-AVSInterface::GetAnalogIn(const int &device_id, const int &analog_input_id, float *analog_reading) {
+AVSWrapper::GetAnalogIn(const int &device_id, const int &analog_input_id, float *analog_reading) {
     int analog_in_return = AVS_GetAnalogIn(device_id, analog_input_id, analog_reading);
     
     if (analog_in_return != 0) {

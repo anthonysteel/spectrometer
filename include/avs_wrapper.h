@@ -2,7 +2,7 @@
 #include "avs_exception.h"
 #include "meas_config_type_builder.h"
 
-class AVSInterface
+class AVSWrapper
 {
     private:
         AvsIdentityType device_id_info[30];
@@ -11,7 +11,7 @@ class AVSInterface
         int Init(const int &usb_port);
 
     public:
-        AVSInterface(const int &usb_port);
+        AVSWrapper(const int &usb_port);
 
         // int Init(const int &usb_port);
         int Activate(const int &device_number);
