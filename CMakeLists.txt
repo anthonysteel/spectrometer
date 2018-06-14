@@ -68,6 +68,19 @@ target_include_directories(parser PUBLIC
     ${CMAKE_SOURCE_DIR}/include/
 )
 
+#######################
+# AVS Wrapper Library #
+#######################
+add_library(avs_wrapper ${CMAKE_SOURCE_DIR}/src/avs_wrapper.cc)
+target_include_directories(avs_wrapper PUBLIC
+    ${CMAKE_SOURCE_DIR}/include/
+)
+target_link_libraries(avs_wrapper
+    AvaSpec
+    avs_exception
+    meas_config_type_builder
+)
+
 ########################
 # Spectrometer Library #
 ########################
@@ -116,5 +129,14 @@ target_link_libraries(ParseTest
     GTest
 )
 add_test(NAME ParseTest COMMAND ParseTest)
+
+add_executable(WrapperTest test/avs_wrapper.test.cc)
+target_include_directories(WrapperTest PUBLIC
+    ${CMAKE_SOURCE_DIR}/include/
+)
+target_link_libraries(WrapperTest
+    avs_wrapper
+    GTest
+)
 
 # vim: set ts=4 sw=4 et :
