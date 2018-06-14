@@ -7,7 +7,8 @@ TEST(AVSWrapper, deactivate)
   int usb_port = 0;
   int device_number = 0;
 
-  AVSWrapper avs(usb_port);
+  AVSWrapper avs;
+  avs.Init(usb_port);
   int device_id = avs.Activate(device_number);
 
   avs.Deactivate(device_id);
@@ -42,7 +43,8 @@ TEST(AVSWrapper, measure)
   MeasConfigTypeBuilder meas_config_type_builder;
   MeasConfigType spec_config = meas_config_type_builder.build(config_vector);
 
-  AVSWrapper avs(usb_port);
+  AVSWrapper avs();
+  avs.Init(usb_port);
   int device_id = avs.Activate(device_number);
 
   avs.PrepareMeasure(device_id, spec_config);
@@ -63,7 +65,8 @@ TEST(AVSWrapper, analog)
   int usb_port = 0;
   int device_number = 0;
 
-  AVSWrapper avs(usb_port);
+  AVSWrapper avs();
+  avs.Init(usb_port);
   int device_id = avs.Activate(device_number);
 
   float *analog_reading = new float;

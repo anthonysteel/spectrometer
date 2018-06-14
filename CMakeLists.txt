@@ -93,6 +93,7 @@ target_link_libraries(spectrometer
     AvaSpec
     validator
     avs_exception
+    avs_wrapper
     parser
     meas_config_type_builder
 )

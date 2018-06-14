@@ -8,17 +8,14 @@ class AVSWrapper
     AvsIdentityType device_id_info[30];
     AVSException SpecException;
 
-    int Init(const int &usb_port);
-
   public:
-    AVSWrapper(const int &usb_port);
-
-    // int Init(const int &usb_port);
+    int Init(const int &usb_port);
     int Activate(const int &device_number);
     void Deactivate(const int &device_id);
+    // TODO split UpdateUSBDevices into two separate methods
     int UpdateUSBDevices();
 
-    void PrepareMeasure(const int &device_id, MeasConfigType spec_config);
+    void PrepareMeasure(const int &device_id, MeasConfigType *spec_config);
     void Measure(const int &device_id, const short &num_measurements);
     int PollScan(const int &device_id);
 

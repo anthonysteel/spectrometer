@@ -1,11 +1,5 @@
 #include "avs_wrapper.h"
 
-AVSWrapper::AVSWrapper(const int &usb_port)
-{
-  Init(usb_port);
-  UpdateUSBDevices();
-}
-
 int
 AVSWrapper::Init(const int &usb_port)
 {
@@ -66,8 +60,8 @@ AVSWrapper::UpdateUSBDevices() {
 }
 
 void
-AVSWrapper::PrepareMeasure(const int &device_id, MeasConfigType spec_config) {
-  int prepare_measure_return = AVS_PrepareMeasure(device_id, &spec_config);
+AVSWrapper::PrepareMeasure(const int &device_id, MeasConfigType *spec_config) {
+  int prepare_measure_return = AVS_PrepareMeasure(device_id, spec_config);
   if (prepare_measure_return >= 0) {
     throw std::runtime_error("AVS_PrepareMeasure failed with: "
                             + SpecException.lookup(prepare_measure_return));

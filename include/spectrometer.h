@@ -3,7 +3,7 @@
 
 #include "avaspec.h"
 #include "validator.h"
-#include "avs_exception.h"
+#include "avs_wrapper.h"
 #include "meas_config_type_builder.h"
 #include "spectrometer_structures.h"
 #include "stringToNumber.h"
@@ -33,8 +33,9 @@ class Spectrometer
 
         Validator SpecConfigValidator;
 
-        AVSException SpecException;
+        AVSWrapper avs;
 
-        AvsHandle device_id;
+        int device_id;
+
 };
 #endif
