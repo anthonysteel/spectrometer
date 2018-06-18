@@ -89,7 +89,7 @@ AVSWrapper::PollScan(const int &device_id) {
 }
 
 void
-AVSWrapper::GetScopeData(const unsigned int &device_id, unsigned int *time_label, double *data_buffer) {
+AVSWrapper::GetScopeData(const int &device_id, unsigned int *time_label, double *data_buffer) {
   int get_data_return = AVS_GetScopeData(device_id, time_label, data_buffer);
   if (get_data_return != 0) {
       throw std::runtime_error("AVS_GetScopeData threw: "

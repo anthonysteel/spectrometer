@@ -1,3 +1,6 @@
+#ifndef AVS_WRAPPER_H
+#define AVS_WRAPPER_H
+
 #include "avaspec.h"
 #include "avs_exception.h"
 #include "meas_config_type_builder.h"
@@ -19,7 +22,8 @@ class AVSWrapper
     void Measure(const int &device_id, const short &num_measurements);
     int PollScan(const int &device_id);
 
-    void GetScopeData(const unsigned int &device_id, unsigned int *time_label, double *data_buffer);
+    void GetScopeData(const int &device_id, unsigned int *time_label, double *data_buffer);
     void GetAnalogIn(const int &device_id, 
              const int &analog_input_id, float *analog_reading);
 };
+#endif
