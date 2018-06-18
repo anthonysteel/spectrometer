@@ -3,19 +3,20 @@
 
 #include "avaspec.h"
 #include "validator.h"
-#include "avs_wrapper.h"
+#include "avs_interface.h"
 #include "meas_config_type_builder.h"
 #include "spectrometer_structures.h"
 #include "stringToNumber.h"
 #include <string>
 #include <vector>
+#include <stdexcept>
 #include <unistd.h>
 #include <math.h>
 
 class Spectrometer
 {
     public:
-        Spectrometer(std::vector<spec_config_param> config_vector);
+        Spectrometer(AVSInterface *a, std::vector<spec_config_param> config_vector, std::string meas_config_filepath);
 
         void activate();
         void deactivate();
@@ -33,9 +34,9 @@ class Spectrometer
 
         Validator SpecConfigValidator;
 
-        AVSWrapper avs;
-
         int device_id;
+
+        AVSInterface *avs;
 
 };
 #endif

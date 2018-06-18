@@ -1,9 +1,12 @@
 #include "spectrometer.h"
 
 Spectrometer::
-Spectrometer(std::vector<spec_config_param> config_vector)
-    :SpecConfigValidator("/home/pi/spectrometer/config/meas_config.csv"), avs()
+Spectrometer(AVSInterface *a, std::vector<spec_config_param> config_vector, std::string meas_config_filepath)
+    :SpecConfigValidator(meas_config_filepath), avs(a)
 {
+    if (a == nullptr) {
+        throw std::invalid_argument("null dependency");
+    }
 
     for(const spec_config_param& param : config_vector) {
         try {
@@ -26,19 +29,19 @@ Spectrometer::
 activate()
 {
     int usb_port = 0;
-    avs.Init(usb_port);
+    avs->Init(usb_port);
 
     int device_number = 0;
-    device_id = avs.Activate(device_number);
+    device_id = avs->Activate(device_number);
 
-    avs.PrepareMeasure(device_id, &spec_config);
+    avs->PrepareMeasure(device_id, &spec_config);
 }
 
 void
 Spectrometer::
 deactivate()
 {
-    avs.Deactivate(device_id);
+    avs->Deactivate(device_id);
 }
 
 
@@ -46,13 +49,13 @@ std::vector<double>
 Spectrometer::
 measure()
 {
-    avs.Measure( device_id, 1 );
+    avs->Measure( device_id, 1 );
 
     int required_delay = 10; // ms
     int attempts = 0;
     int pollscan_return;
 
-    while(!(pollscan_return = avs.PollScan(device_id)) && attempts != 100) {
+    while(!(pollscan_return = avs->PollScan(device_id)) && attempts != 100) {
         usleep(required_delay);
         attempts++;
     }
@@ -64,7 +67,7 @@ measure()
 
     int get_data_return;
     for(int i = 0; i < 2048; i++) {
-        avs.GetScopeData(device_id, time_label, data_buffer);
+        avs->GetScopeData(device_id, time_label, data_buffer);
         spec_measurement_data.push_back(data_buffer[i]);
     }
 
@@ -92,7 +95,7 @@ getThermistor()
 {
     float *analog_reading = new float;
 
-    avs.GetAnalogIn(device_id, 0, analog_reading);
+    avs->GetAnalogIn(device_id, 0, analog_reading);
     float temperature_reading = voltageToCelsius(*analog_reading);
 
     delete analog_reading;

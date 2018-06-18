@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "avs_wrapper.h"
 #include "spectrometer.h"
 #include "spectrometer_structures.h"
 #include <vector>
@@ -26,8 +27,10 @@ TEST(Spectrometer, measure)
         {"laser_wavelength", "785"},
         {"store_to_ram", "1"}
     };    
+    std::string meas_config_filepath = "/home/pi/spectrometer/config/meas_config.csv";
+    AVSWrapper avs;
 
-    Spectrometer s(config_vector);
+    Spectrometer s(&avs,config_vector,meas_config_filepath);
     s.activate();
 
     std::vector<double> data = s.measure();
@@ -58,7 +61,10 @@ TEST(Spectrometer, getThermistor)
         {"store_to_ram", "1"}
     };    
 
-    Spectrometer s(config_vector);
+    std::string meas_config_filepath = "/home/pi/spectrometer/config/meas_config.csv";
+    AVSWrapper avs;
+
+    Spectrometer s(&avs,config_vector,meas_config_filepath);
     s.activate();
 
     float thermistor_value = s.getThermistor();

@@ -36,7 +36,8 @@ AVSWrapper::Deactivate(const int &device_id)
 }
 
 int
-AVSWrapper::UpdateUSBDevices() {
+AVSWrapper::UpdateUSBDevices()
+{
   int update_usb_return = AVS_UpdateUSBDevices();
   unsigned int required_bytes;
 
@@ -60,7 +61,8 @@ AVSWrapper::UpdateUSBDevices() {
 }
 
 void
-AVSWrapper::PrepareMeasure(const int &device_id, MeasConfigType *spec_config) {
+AVSWrapper::PrepareMeasure(const int &device_id, MeasConfigType *spec_config)
+{
   int prepare_measure_return = AVS_PrepareMeasure(device_id, spec_config);
   if (prepare_measure_return >= 0) {
     throw std::runtime_error("AVS_PrepareMeasure failed with: "
@@ -69,7 +71,8 @@ AVSWrapper::PrepareMeasure(const int &device_id, MeasConfigType *spec_config) {
 }
 
 void
-AVSWrapper::Measure(const int &device_id, const short &num_measurements) {
+AVSWrapper::Measure(const int &device_id, const short &num_measurements)
+{
   int measure_callback_return = AVS_MeasureCallback(device_id, NULL, 1);
   if (measure_callback_return != 0) {
     throw std::runtime_error("AVS_MeasureCallback failed with: "

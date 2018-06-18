@@ -1,11 +1,12 @@
 #ifndef AVS_WRAPPER_H
 #define AVS_WRAPPER_H
 
+#include "avs_interface.h"
 #include "avaspec.h"
 #include "avs_exception.h"
 #include "meas_config_type_builder.h"
 
-class AVSWrapper
+class AVSWrapper: public AVSInterface
 {
   private:
     AvsIdentityType device_id_info[30];

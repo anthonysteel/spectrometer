@@ -60,6 +60,17 @@ target_include_directories(avs_exception PUBLIC
     ${CMAKE_SOURCE_DIR}/include/
 )
 
+#########################
+# AVS Interface Library #
+#########################
+add_library(avs_interface INTERFACE)
+target_include_directories(avs_interface INTERFACE
+    ${CMAKE_SOURCE_DIR}/include/
+)
+target_link_libraries(avs_interface INTERFACE
+    meas_config_type_builder
+)
+
 ##################
 # Parser Library #
 ##################
@@ -76,6 +87,7 @@ target_include_directories(avs_wrapper PUBLIC
     ${CMAKE_SOURCE_DIR}/include/
 )
 target_link_libraries(avs_wrapper
+    avs_interface
     AvaSpec
     avs_exception
     meas_config_type_builder
@@ -93,6 +105,7 @@ target_link_libraries(spectrometer
     AvaSpec
     validator
     avs_exception
+    avs_interface
     avs_wrapper
     parser
     meas_config_type_builder
