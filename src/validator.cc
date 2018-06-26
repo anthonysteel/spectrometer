@@ -1,14 +1,14 @@
 #include "validator.h"
 
 Validator::
-Validator()
+Validator(std::string path_to_config)
 {
     std::string row;
     std::ifstream config_file;
     std::vector<std::vector<std::string>> parsed_rows;
     Parser csv_parser;
     
-    config_file.open("/home/pi/spectrometer/config/meas_config.csv");
+    config_file.open(path_to_config);
 
     if (config_file.is_open())
     {
