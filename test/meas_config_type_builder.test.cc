@@ -1,32 +1,30 @@
 #include "gtest/gtest.h"
 #include "meas_config_type_builder.h"
 
-MeasConfigTypeBuilder meas_config_type_builder;
-
-std::vector<spec_config_param> config_vector = {
-    {"start_pixel", "0"},
-    {"stop_pixel", "2047"},
-    {"integration_time", "100"},
-    {"integration_delay", "1"},
-    {"number_averages", "1"},
-    {"enable", "0"},
-    {"forget_percentage", "100"},
-    {"smooth_pixel", "0"},
-    {"smooth_model", "0"},
-    {"mode", "0"},
-    {"source", "0"},
-    {"source_type", "1"},
-    {"strobe_control", "0"},
-    {"laser_delay", "0"},
-    {"laser_width", "10000"},
-    {"laser_wavelength", "785"},
-    {"store_to_ram", "5"}
-};    
-
-MeasConfigType spec_config = meas_config_type_builder.build(config_vector);
 
 TEST(MeasConfigTypeBuilder, StartPixel)
 {
+MeasConfigTypeBuilder meas_config_type_builder;
+std::vector<spec_config_param> config_vector = {
+    {"start_pixel", 0},
+    {"stop_pixel", 2047},
+    {"integration_time", 100},
+    {"integration_delay", 1},
+    {"number_averages", 1},
+    {"enable", "0"},
+    {"forget_percentage", 100},
+    {"smooth_pixel", 0},
+    {"smooth_model", 0},
+    {"mode", 0},
+    {"source", 0},
+    {"source_type", 1},
+    {"strobe_control", 0},
+    {"laser_delay", 0},
+    {"laser_width", 10000},
+    {"laser_wavelength", 785},
+    {"store_to_ram", 5}
+};    
+MeasConfigType spec_config = meas_config_type_builder.build(config_vector);
     EXPECT_EQ(spec_config.m_StartPixel, 0);
 }
 

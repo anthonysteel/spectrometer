@@ -36,7 +36,7 @@ validate_entry(spec_config_param unvalidated_param, validator_map_entry entry)
 {
     TYPE lower = stringToNumber<TYPE>(entry.lower);
     TYPE upper = stringToNumber<TYPE>(entry.upper);
-    TYPE value = stringToNumber<TYPE>(unvalidated_param.value); 
+    TYPE value = unvalidated_param.value; 
     return value >= lower && value <= upper;
 }
 

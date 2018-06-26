@@ -12,7 +12,7 @@ Spectrometer(std::vector<spec_config_param> config_vector)
                 spec_config = meas_config_type_builder.build(config_vector);
             } else {
                 throw std::range_error(param.name + " with value " 
-                                       + param.value
+                                       + std::to_string(param.value)
                                        + " is out of range");
             }
         }
