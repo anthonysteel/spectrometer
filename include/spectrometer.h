@@ -3,28 +3,30 @@
 
 #include "avaspec.h"
 #include "validator.h"
+#include "avs_exception.h"
 #include "meas_config_type_builder.h"
 #include "spectrometer_structures.h"
 #include "stringToNumber.h"
 #include <string>
 #include <vector>
 #include <unistd.h>
+#include <math.h>
 
 class Spectrometer
 {
     public:
         Spectrometer(std::vector<spec_config_param> config_vector);
-
         void activate();
-        
+        void deactivate();
         std::vector<double> measure();
+        float getThermistor();
     private:
-        MeasConfigType spec_config;
-
+        const int SUCCESS = 0, NO_DATA_IN_RAM = -17;
+        float voltageToCelsius(float analog_reading);
         void defineConfigLookup();
-
+        MeasConfigType spec_config;
         Validator SpecConfigValidator;
-
+        AVSException SpecException;
         AvsHandle device_id;
 };
 #endif

@@ -4,7 +4,7 @@
 typedef struct 
 {
     std::string name;
-    std::string value;
+    int value;
 } spec_config_param;
 
 typedef struct 

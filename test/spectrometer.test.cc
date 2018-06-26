@@ -3,8 +3,52 @@
 #include "spectrometer_structures.h"
 #include <vector>
 #include "type.h"
+#include <fstream>
+#include <iostream>
 
-TEST(Spectrometer, TakeMeasure)
+TEST(Spectrometer, measure)
+{
+    std::vector<spec_config_param> config_vector;
+    config_vector = {
+        {"start_pixel", "0"},
+        {"stop_pixel", "2047"},
+        {"integration_time", "100"},
+        {"integration_delay", "0"},
+        {"number_averages", "3"},
+        {"enable", "0"},
+        {"forget_percentage", "100"},
+        {"smooth_pixel", "0"},
+        {"smooth_model", "0"},
+        {"mode", "0"},
+        {"source", "0"},
+        {"source_type", "0"},
+        {"strobe_control", "0"},
+        {"laser_delay", "0"},
+        {"laser_width", "10000"},
+        {"laser_wavelength", "785"},
+        {"store_to_ram", "1"}
+    };    
+
+    Spectrometer s(config_vector);
+    s.activate();
+
+    std::vector<double> data = s.measure();
+    for (const double& byte : data) {
+        std::cout << byte << std::endl;
+    }
+
+    std::ofstream data_file("datafile.csv");
+    if (data_file.is_open()) {
+        for (int i = 0; i <= data.size(); i++) {
+            data_file << i << ", " << data[i] << std::endl;
+        }
+        data_file.close();
+    }
+
+    s.deactivate();
+}
+
+TEST(Spectrometer, getThermistor)
 {
     std::vector<spec_config_param> config_vector;
     config_vector = {
@@ -27,9 +71,13 @@ TEST(Spectrometer, TakeMeasure)
         {"store_to_ram", "1"}
     };    
 
-	Spectrometer s(config_vector);
-	s.activate();
-    std::vector<double> data = s.measure();
+    Spectrometer s(config_vector);
+    s.activate();
+
+    float thermistor_value = s.getThermistor();
+    std::cout << "Thermistor value is " << thermistor_value << std::endl;
+
+    s.deactivate();
 }
 
 int main(int argc, char **argv) 
