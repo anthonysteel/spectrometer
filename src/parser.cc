@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "iostream"
 
 std::vector<std::string>
 Parser::
@@ -18,6 +19,9 @@ parseRow(std::string row)
     }
 
     parsed.push_back(column_value);
-
+    for (auto val : parsed) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
     return parsed;
 }

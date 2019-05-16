@@ -1,10 +1,8 @@
 #include "spectrometer.h"
 
-Spectrometer::
-Spectrometer(std::vector<spec_config_param> config_vector)
-    :SpecConfigValidator("/home/pi/spectrometer/config/meas_config.csv")
+Spectrometer::Spectrometer(std::vector<spec_config_param> config_vector)
+    :SpecConfigValidator("/home/qset/Documents/spectrometer/config/meas_config.csv") 
 {
-
     for(const spec_config_param& param : config_vector) {
         try {
             if (SpecConfigValidator.validate(param)) {
@@ -21,9 +19,7 @@ Spectrometer(std::vector<spec_config_param> config_vector)
     }
 }
 
-void
-Spectrometer::
-activate()
+void Spectrometer::activate()
 {
     AvsIdentityType device_id_info[30];
     int USB_port = 0;
@@ -71,9 +67,7 @@ activate()
     }
 }
 
-void
-Spectrometer::
-deactivate()
+void Spectrometer::deactivate()
 {
     bool deactivate_return = AVS_Deactivate(device_id);
     if (deactivate_return != true) {
@@ -82,9 +76,7 @@ deactivate()
 }
 
 
-std::vector<double>
-Spectrometer::
-measure()
+std::vector<double> Spectrometer::measure()
 {
     int measurecallback_return = AVS_MeasureCallback( device_id, NULL, 1 );
 
@@ -134,9 +126,7 @@ measure()
 }
 
 
-float
-Spectrometer::
-voltageToCelsius(float analog_reading)
+float Spectrometer::voltageToCelsius(float analog_reading)
 {
     return 118.69
            - 70.361 * analog_reading
@@ -146,8 +136,7 @@ voltageToCelsius(float analog_reading)
 }
 
 float
-Spectrometer::
-getThermistor()
+Spectrometer::getThermistor()
 {
     float *analog_reading = new float;
     int analog_in_return = AVS_GetAnalogIn(device_id, 0, analog_reading);

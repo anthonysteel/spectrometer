@@ -1,8 +1,6 @@
 #include "meas_config_type_builder.h"
 
-MeasConfigType
-MeasConfigTypeBuilder::
-build(std::vector<spec_config_param> config_vector)
+MeasConfigType MeasConfigTypeBuilder::build(std::vector<spec_config_param> config_vector)
 {
     for (auto const& param : config_vector) {
         if (param.name == "integration_delay") {

@@ -1,7 +1,6 @@
 #include "validator.h"
 
-Validator::
-Validator(std::string path_to_config)
+Validator::Validator(std::string path_to_config)
 {
     std::string row;
     std::ifstream config_file;
@@ -17,9 +16,15 @@ Validator(std::string path_to_config)
     }
 
     if (config_file.is_open()) {
-        while (std::getline(config_file, row)) {
-            parsed_rows.push_back(csv_parser.parseRow(row));
-        }
+	/* this is throwing an error because getline is trying to fetch another
+           line after the file is empty 
+        */
+	try {
+		while (std::getline(config_file, row)) {
+		    std::cout << row << std::endl;
+		    parsed_rows.push_back(csv_parser.parseRow(row));
+		}
+	} catch (...) {}
 
         for (const std::vector<std::string> &line : parsed_rows) {
             std::string type = line[0],
@@ -39,9 +44,7 @@ Validator(std::string path_to_config)
     }
 }
 
-bool
-Validator::
-validate(spec_config_param unvalidated_param)
+bool Validator::validate(spec_config_param unvalidated_param)
 {
     spec_config_param valid_param;
 
